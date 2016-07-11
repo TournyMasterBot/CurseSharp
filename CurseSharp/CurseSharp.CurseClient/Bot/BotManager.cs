@@ -56,7 +56,7 @@ namespace CurseSharp.CurseClient.Bot
 #endif
 
             var loginRequest = new LoginEndpoint();
-            var account = loginRequest.Login(new AccountModel { Username = "TournyDev", Password = "QIGOGDoOLFAeMSR9ctvZ" });
+            var account = loginRequest.Login(new AccountModel { Username = username, Password = password });
             socket = new WebSocketWrapper("wss://notifications-v1.curseapp.net/");
             socket.MessageReceived += Socket_MessageReceived;
             socket.Connect();

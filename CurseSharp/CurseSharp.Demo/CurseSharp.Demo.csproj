@@ -50,10 +50,6 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\CurseSharp.Core\CurseSharp.Core.csproj">
-      <Project>{100cf4bf-cba6-4f58-8e4c-4b44ac00e952}</Project>
-      <Name>CurseSharp.Core</Name>
-    </ProjectReference>
     <ProjectReference Include="..\CurseSharp.CurseClient\CurseSharp.CurseClient.csproj">
       <Project>{3df3c1fd-98c1-447c-a0f1-4733a0db40ef}</Project>
       <Name>CurseSharp.CurseClient</Name>
