@@ -349,18 +349,9 @@ namespace CuseSharp
                     var result = sr.ReadToEnd();
                     if(!string.IsNullOrEmpty(result))
                     {
-                        try
-                        {
-                            var json = JObject.Parse(result);
-                            if(json != null)
-                            {
-                            }
-                        }
-                        catch(Exception)
-                        {
-                            throw;
-                        }
-
+#if VERBOSE_LOGGING
+                        Log.Verbose($"<< {result}");
+#endif
                     }
                     return result;
                 }

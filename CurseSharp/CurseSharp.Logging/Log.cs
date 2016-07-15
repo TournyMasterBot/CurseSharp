@@ -46,7 +46,7 @@ namespace CurseSharp.Logging
         /// <summary>
         /// Criticality of the log
         /// </summary>
-        private enum LogLevel
+        public enum LogLevel
         {
             Verbose = 0,
             Debug = 1,
@@ -62,6 +62,47 @@ namespace CurseSharp.Logging
         {
             logQueueWriteTimer.Elapsed += new ElapsedEventHandler(LogWriteQueueHandler);
             logQueueWriteTimer.Start();
+        }
+
+        /// <summary>
+        /// Turns Console logging on/off
+        /// </summary>
+        /// <param name="echoResponse">
+        /// True: On
+        /// False: Off
+        /// </param>
+        public static void SetEchoConsole(bool echoResponse)
+        {
+            writeToConsoleWindow = echoResponse;
+        }
+
+        /// <summary>
+        /// Turns Output Window logging on/off
+        /// </summary>
+        /// <param name="echoResponse">
+        /// True: On
+        /// False: Off
+        /// </param>
+        public static void SetEchoOutputWindow(bool echoResponse)
+        {
+            writeToDebugWindow = echoResponse;
+        }
+
+        /// <summary>
+        /// Turns disk logging on/off
+        /// </summary>
+        /// <param name="echoResponse">
+        /// True: On
+        /// False: Off
+        /// </param>
+        public static void SetEchoDisk(bool echoResponse)
+        {
+            writeToDisk = echoResponse;
+        }
+
+        public static void SetMinLogLevel(LogLevel logLevel)
+        {
+            minLogLevel = logLevel;
         }
 
         /// <summary>

@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using static CurseSharp.CurseClient.Models.Enums;
 using static CuseSharp.Sockets.WebSocketWrapper;
 using CurseSharp.CurseClient.Events;
+using CurseSharp.CurseClient.Models.BotModels;
 
 namespace CurseSharp.CurseClient.Bot
 {
@@ -27,6 +28,8 @@ namespace CurseSharp.CurseClient.Bot
         /// Event handler for 'Create' messages. This type is a subset of the MessageReceived event.
         /// </summary>
         public event EventHandler<CreateMessageReceivedEventArgs> CreateMessageReceived;
+
+        public BotCommandManager CommandManager = new BotCommandManager();
 
         /// <summary>
         /// Web Socket that is connected to Curse servers.
@@ -56,7 +59,7 @@ namespace CurseSharp.CurseClient.Bot
 #endif
 
             var loginRequest = new LoginEndpoint();
-            var account = loginRequest.Login(new AccountModel { Username = username, Password = password });
+            Account = loginRequest.Login(new AccountModel { Username = username, Password = password });
             socket = new WebSocketWrapper("wss://notifications-v1.curseapp.net/");
             socket.MessageReceived += Socket_MessageReceived;
             socket.Connect();
@@ -67,10 +70,10 @@ namespace CurseSharp.CurseClient.Bot
             }).Unwrap().Result;
             if(isAlive)
             {
-                var sessionResponse = SessionEndpoint.GetSessionData(account);
-                account.UserData = sessionResponse;
+                var sessionResponse = SessionEndpoint.GetSessionData(Account);
+                Account.UserData = sessionResponse;
                 var notifier = new SendDataModel();
-                notifier.PopulateDefaults(account.UserData.MachineKey, account.UserData.User.UserID, account.UserData.SessionID);
+                notifier.PopulateDefaults(Account.UserData.MachineKey, Account.UserData.User.UserID, Account.UserData.SessionID);
 
                 // Begins the heartbeat task, which sends a ping message every (x) seonds.
                 var cancellationToken = new CancellationTokenSource();
@@ -94,6 +97,40 @@ namespace CurseSharp.CurseClient.Bot
             {
                 Log.Error("Socket does not appear to be connected.");
             }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="conversationID">Channel or users ID. This can be retrieved from the contacts endpoint, or received when reading a users message.</param>
+        /// <param name="message"></param>
+        public void SendChatMessage(string conversationID, string message)
+        {
+            int maxWait = 3;
+            int currentWait = 0;
+            while(!socket.IsAlive || Account.UserData == null || Account.UserData.SessionID == null)
+            {
+#if VERBOSE_LOGGING
+                Log.Verbose($@"Socket isn't ready. Waiting... Socket: {socket.SocketID}");
+#endif
+                Thread.Sleep(1000);
+                currentWait++;
+                if(currentWait > maxWait)
+                {
+                    Log.Error($"Unable to send message to Socket: {socket.SocketID} - max timeout exceeded. Failed to send message to ConversationID: {conversationID}, Message: {message}");
+                    return;
+                }
+            }
+            var messageData = new SendChatMessageModel();
+            messageData.ConversationID = conversationID;
+            messageData.AttachmentID = "00000000-0000-0000-0000-000000000000";
+            messageData.ClientID = Account.UserData.SessionID;
+            messageData.Message = message;
+
+            var messageEnvelope = new MessageEnvelopeModel();
+            messageEnvelope.TypeID = NotificationType.ConversationMessageRequest;
+            messageEnvelope.Body = messageData;
+            socket.Send(JsonConvert.SerializeObject(messageEnvelope));
         }
 
         /// <summary>
@@ -164,10 +201,17 @@ namespace CurseSharp.CurseClient.Bot
                         Mentions = e.Body.Mentions,
                         ConversationNotificationType = e.Body.NotificationType,
                         RecipientID = e.Body.RecipientID,
-                        Author = new Models.BotModels.AuthorModel() { UserID = e.Body.SenderID, Username = e.Body.SenderName},
+                        Author = new AuthorModel() { UserID = e.Body.SenderID, Username = e.Body.SenderName},
                         MessageBody = e.Body.Content
                     };
                     CreateMessageReceived?.Invoke(this, args);
+                    // Make sure there is a message, that the author is populated, and that the author is not the current bot user
+                    if(!string.IsNullOrWhiteSpace(args.MessageBody) && args.Author.UserID != 0
+                        && args.Author.UserID != Account.UserData.User.UserID
+                    )
+                    {
+                        ProcessMessageReceivedForCommands(args);
+                    }
                     break;
                 }
                 // A user edited a previously received message
@@ -185,6 +229,41 @@ namespace CurseSharp.CurseClient.Bot
                 {
                     break;
                 }
+            }
+        }
+
+        private void ProcessMessageReceivedForCommands(CreateMessageReceivedEventArgs message)
+        {
+            try
+            {
+                int length = message.MessageBody.IndexOf(' ');
+                // If no space is in the message, use the whole message to check for command.
+                if(length == -1)
+                {
+                    length = message.MessageBody.Length;
+                }
+                var checkcommand = message.MessageBody.Substring(0, length);
+
+                if(!CommandManager.Commands.ContainsKey(checkcommand))
+                {
+                    return;
+                }
+
+#if VERBOSE_LOGGING
+                Logging.Log.Verbose($"Command Trigger Detected: {checkcommand}");
+#endif
+                Task.Factory.StartNew(() =>
+                {
+                    CommandManager.Commands[checkcommand].ExecuteAction(new CommandTriggerModel() {Command = CommandManager.Commands[checkcommand], Message = message });
+                }, 
+                CommandManager.Commands[checkcommand].CancellationToken.Token, 
+                CommandManager.Commands[checkcommand].TaskCreationOptions, 
+                CommandManager.Commands[checkcommand].TaskScheduler
+                );
+            }
+            catch(Exception ex)
+            {
+                Logging.Log.Error(ex.ToString());
             }
         }
 

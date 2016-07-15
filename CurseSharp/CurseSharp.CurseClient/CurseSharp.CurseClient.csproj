@@ -48,11 +48,21 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Bot\BotCommandManager.cs" />
     <Compile Include="Bot\BotManager.cs" />
+    <Compile Include="Endpoints\ContactsEndpoint.cs" />
     <Compile Include="Endpoints\LoginEndpoint.cs" />
     <Compile Include="Endpoints\SessionEndpoint.cs" />
     <Compile Include="Events\MessageReceivedEvents.cs" />
     <Compile Include="Models\BotModels\AccountModel.cs" />
+    <Compile Include="Models\BotModels\BotCommandModel.cs" />
+    <Compile Include="Models\BotModels\CommandTriggerModel.cs" />
+    <Compile Include="Models\BotModels\SendChatMessageModel.cs" />
+    <Compile Include="Models\ContactModels\ChannelModel.cs" />
+    <Compile Include="Models\ContactModels\ContactApiModel.cs" />
+    <Compile Include="Models\ContactModels\FriendModel.cs" />
+    <Compile Include="Models\ContactModels\GroupModel.cs" />
+    <Compile Include="Models\ContactModels\MembershipModel.cs" />
     <Compile Include="Models\Enums.cs" />
     <Compile Include="Models\WebSocketModels\AttachmentModel.cs" />
     <Compile Include="Models\BotModels\AuthorModel.cs" />
@@ -76,6 +86,7 @@
       <Name>CurseSharp.Logging</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
