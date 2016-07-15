@@ -1,7 +1,7 @@
 # CurseSharp Overview
 This project is designed to enable developers to create a bot that can connect to the Curse Client. This project is just in it's starting phase, so should not be used for production use at this time.
 
-# CurseSharp - Curse Channel (Unofficial Curse API Developers)
+# Curse Channel (Unofficial Curse API Developers)
 https://curse.com/invite/viIE41997UWf1af4ksSkag
 
 # Project Structure
