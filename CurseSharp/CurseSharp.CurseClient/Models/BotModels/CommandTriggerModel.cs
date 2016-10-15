@@ -1,10 +1,10 @@
-﻿using CurseSharp.CurseClient.Events;
+﻿using static CurseSharp.CurseClient.Bot.BotManager;
 
 namespace CurseSharp.CurseClient.Models.BotModels
 {
     public class CommandTriggerModel
     {
-        public CreateMessageReceivedEventArgs Message;
+        public NewMessageReceivedEventArgs Message;
         public BotCommandModel Command;
     }
 }

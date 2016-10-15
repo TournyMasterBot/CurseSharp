@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace CurseSharp.CurseClient.Models.ContactModels
+namespace CurseSharp.CurseClient.Models.CurseClientModels.ContactModels
 {
     /// <summary>
     /// Root api object for Contacts, Gets Friends and Groups

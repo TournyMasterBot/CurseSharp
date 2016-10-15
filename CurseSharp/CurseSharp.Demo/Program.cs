@@ -1,13 +1,13 @@
 ﻿using CurseSharp.Logging;
 using System;
 using System.Runtime.InteropServices;
-using CurseSharp.CurseClient.Events;
 using CurseSharp.CurseClient.Endpoints;
 using System.Linq;
 using CurseSharp.CurseClient.Models.BotModels;
 using System.Threading.Tasks;
 using System.Threading;
 using System.Text;
+using static CurseSharp.CurseClient.Bot.BotManager;
 
 namespace CurseSharp.Demo
 {
@@ -95,7 +95,7 @@ namespace CurseSharp.Demo
 
                             bot = new CurseClient.Bot.BotManager();
                             bot.Run(username, password);
-                            bot.CreateMessageReceived += CreateMessageReceivedHandler;
+                            bot.NewMessageReceived += NewMessageReceivedHandler;
 
                             // This gets all the channels the bot is connected to.
                             var availableChannels = new ContactsEndpoint();
@@ -106,13 +106,13 @@ namespace CurseSharp.Demo
                                 contactData
                                     // Look for text chats in groups
                                     .Groups.Where(x => x.GroupMode == CurseClient.Models.Enums.GroupMode.TextOnly)
-                                    .Select(x => x.Channels // Once we've found the relevant group, we need to look at the channels
-                                                            // Specifically, text channels
+                                    .Select(x => x.Channels 
+                                        // Once we've found the relevant group, we need to look at text channels
                                         .Where(y => y.GroupMode == CurseClient.Models.Enums.GroupMode.TextOnly)
                                         // But more specifically, we want the group ID so that we can send a message to it.
                                         .Select(y => y.GroupID).First()
                                     ).First();
-                            bot.SendChatMessage(testChannel, $"Test <{Guid.NewGuid()}>"); // NewGuid just for debugging.
+                            MessageEndpoint.SendChatMessage(bot.Account, testChannel, $"Test <{Guid.NewGuid()}>"); // NewGuid just for debugging.
 
                             // Example for creating a new bot command
                             var botCommandSendTestMessage = new BotCommandModel()
@@ -125,7 +125,7 @@ namespace CurseSharp.Demo
                                 CancellationToken = new CancellationTokenSource(),
                                 ExecuteAction = new Action<CommandTriggerModel>((CommandTriggerModel message) =>
                                 {
-                                    bot.SendChatMessage(testChannel, $"This is a test message from the CommandManager. <{Guid.NewGuid()}>");
+                                    MessageEndpoint.SendChatMessage(bot.Account, testChannel, $"This is a test message from the CommandManager. <{Guid.NewGuid()}>");
                                 })
                             };
                             bot.CommandManager.AddCommand(botCommandSendTestMessage);
@@ -144,22 +144,22 @@ namespace CurseSharp.Demo
                                     int i = 0;
                                     try
                                     {
-                                        bot.SendChatMessage(testChannel, $"Let's count to infinity!");
+                                        MessageEndpoint.SendChatMessage(bot.Account, testChannel, $"Let's count to infinity!");
                                         Thread.Sleep(1000);
                                         while(!message.Command.CancellationToken.IsCancellationRequested)
                                         {
                                             CancellationToken token = message.Command.CancellationToken.Token;
                                             i++;
-                                            bot.SendChatMessage(testChannel, $"{i}");
+                                            MessageEndpoint.SendChatMessage(bot.Account, testChannel, $"{i}");
                                             Thread.Sleep(1000);
                                         }
 
-                                        bot.SendChatMessage(testChannel, $"Aw, ok. I'll stop counting to infinity.");
+                                        MessageEndpoint.SendChatMessage(bot.Account, testChannel, $"Aw, ok. I'll stop counting to infinity.");
                                         message.Command.CancellationToken = new CancellationTokenSource();
                                     }
                                     catch(Exception ex)
                                     {
-                                        bot.SendChatMessage(testChannel, $"Something broke. I'll stop counting to infinity.");
+                                        MessageEndpoint.SendChatMessage(bot.Account, testChannel, $"Something broke. I'll stop counting to infinity.");
                                         Logging.Log.Error(ex.ToString());
                                     }
                                 })
@@ -203,7 +203,7 @@ namespace CurseSharp.Demo
                                         }
                                         if(!string.IsNullOrWhiteSpace(commandlist.ToString()))
                                         {
-                                            bot.SendChatMessage(testChannel, commandlist.ToString());
+                                            MessageEndpoint.SendChatMessage(bot.Account, testChannel, commandlist.ToString());
                                         }
                                     }
                                 })
@@ -256,7 +256,7 @@ namespace CurseSharp.Demo
         /// This event is a subset of the 'MessageReceived' event (which contains all [new|edited|deleted] messages)
         /// 'Create Message' only occurrs when a new message is created.
         /// </summary>
-        private static void CreateMessageReceivedHandler(object sender, CreateMessageReceivedEventArgs e)
+        private static void NewMessageReceivedHandler(object sender, NewMessageReceivedEventArgs e)
         {
             Console.WriteLine($"{e.Author.Username} said: {e.MessageBody}");
         }

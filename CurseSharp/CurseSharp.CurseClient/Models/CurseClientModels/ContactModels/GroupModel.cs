@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using static CurseSharp.CurseClient.Models.Enums;
 
-namespace CurseSharp.CurseClient.Models.ContactModels
+namespace CurseSharp.CurseClient.Models.CurseClientModels.ContactModels
 {
     /// <summary>
     /// Todo: Work In Progress
@@ -14,10 +14,7 @@ namespace CurseSharp.CurseClient.Models.ContactModels
         public string HomeRegionKey { get; set; }
         public string ParentGroupID { get; set; }
         public string RootGroupID { get; set; }
-        /// <summary>
-        /// Todo: Finish
-        /// </summary>
-        public object VoiceSessionCode { get; set; }
+        public string VoiceSessionCode { get; set; }
         public string MessageOfTheDay { get; set; }
         public GroupType GroupType { get; set; }
         public GroupSubType GroupSubtype { get; set; }
@@ -25,15 +22,9 @@ namespace CurseSharp.CurseClient.Models.ContactModels
         public bool MetaDataOnly { get; set; }
         public bool AllowTemporaryChildGroups { get; set; }
         public bool ForcePushToTalk { get; set; }
-        /// <summary>
-        /// Todo: Figure out which status this maps to
-        /// </summary>
-        public int Status { get; set; }
+        public GroupStatus Status { get; set; }
         public bool IsDefaultChannel { get; set; }
-        /// <summary>
-        /// Todo: Finish
-        /// </summary>
-        public object Roles { get; set; }
+        public List<GroupRoleModel> Roles { get; set; }
         public Dictionary<string, int> RolePermissions { get; set; }
         public MembershipModel Membership { get; set; }
         public int MemberCount { get; set; }

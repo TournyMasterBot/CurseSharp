@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using CurseSharp.CurseClient.Extensions;
+using Newtonsoft.Json;
 using System.Collections.Generic;
 using static CurseSharp.CurseClient.Models.Enums;
 
@@ -10,14 +11,16 @@ namespace CurseSharp.CurseClient.WebSocketModels
     public class MessageNotificationModel
     {
         public NotificationType TypeID { get; set; }
-        public Body Body { get; set; }
+        [JsonConverter(typeof(BlobJsonConverter))]
+        public string Body { get; set; }
     }
 
     /// <summary>
     /// Message Body Content, populated details change based on the message received. Use 'MessageNotificationModel' to deserialize the message from the wire.
     /// </summary>
-    public class Body
+    public class ChatMessageReceived
     {
+        public string SocketID { get; set; }
         public string ClientID { get; set; }
         public string ServerID { get; set; }
         public string ConversationID { get; set; }

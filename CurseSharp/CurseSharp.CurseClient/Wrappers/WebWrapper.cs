@@ -1,4 +1,5 @@
 ﻿using CurseSharp.CurseClient.BotModels;
+using CurseSharp.CurseClient.Models.BotModels;
 using CurseSharp.Logging;
 using Newtonsoft.Json.Linq;
 using System;
@@ -25,7 +26,7 @@ namespace CuseSharp
         public static string Delete(string url, string token, bool isBotAccount = false)
         {
             var httpRequest = (HttpWebRequest)WebRequest.Create(url);
-            httpRequest.Headers["authenticationtoken"] = token;
+            httpRequest.Headers["AuthenticationToken"] = token;
             httpRequest.ContentType = "application/json";
             httpRequest.Method = "DELETE";
             httpRequest.UserAgent += $" {UserAgentString}";
@@ -58,7 +59,7 @@ namespace CuseSharp
         public static string Put(string url, string token)
         {
             var httpRequest = (HttpWebRequest)WebRequest.Create(url);
-            httpRequest.Headers["authenticationtoken"] = token;
+            httpRequest.Headers["AuthenticationToken"] = token;
             httpRequest.ContentType = "application/x-www-form-urlencoded";
             httpRequest.Method = "PUT";
             httpRequest.UserAgent += $" {UserAgentString}";
@@ -94,7 +95,7 @@ namespace CuseSharp
             try
             {
                 var httpRequest = (HttpWebRequest)WebRequest.Create(url);
-                httpRequest.Headers.Add($"authenticationtoken: {account.SessionData.Session.Token}");
+                httpRequest.Headers.Add($"AuthenticationToken: {account.SessionData.Session.Token}");
                 httpRequest.ContentLength = message.Length;
                 httpRequest.ContentType = "application/json";
                 httpRequest.Method = "POST";

@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using static CurseSharp.CurseClient.Models.Enums;
 
-namespace CurseSharp.CurseClient.Models.ContactModels
+namespace CurseSharp.CurseClient.Models.CurseClientModels.ContactModels
 {
     /// <summary>
     /// Todo: Work In Progress

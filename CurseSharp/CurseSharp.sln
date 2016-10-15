@@ -17,6 +17,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Documentation", "Documentat
 		..\README.md = ..\README.md
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CurseSharp.UI", "CurseSharp.UI\CurseSharp.UI.csproj", "{FB505DBA-B25E-4ABA-8AD6-B01171050346}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{F222A354-E064-4064-8445-6021BE2429F9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F222A354-E064-4064-8445-6021BE2429F9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F222A354-E064-4064-8445-6021BE2429F9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FB505DBA-B25E-4ABA-8AD6-B01171050346}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FB505DBA-B25E-4ABA-8AD6-B01171050346}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FB505DBA-B25E-4ABA-8AD6-B01171050346}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FB505DBA-B25E-4ABA-8AD6-B01171050346}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

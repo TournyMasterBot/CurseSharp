@@ -8,8 +8,6 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 using static CurseSharp.CurseClient.Models.Enums;
-using static CuseSharp.Sockets.WebSocketWrapper;
-using CurseSharp.CurseClient.Events;
 using CurseSharp.CurseClient.Models.BotModels;
 
 namespace CurseSharp.CurseClient.Bot
@@ -17,17 +15,13 @@ namespace CurseSharp.CurseClient.Bot
     /// <summary>
     /// Main Bot class, primary interactions should route through this class.
     /// </summary>
-    public class BotManager : IDisposable
+    public partial class BotManager : IDisposable
     {
         /// <summary>
         /// Account used for all interactions with the web api and websocket
         /// </summary>
         public AccountModel Account { get; set; }
 
-        /// <summary>
-        /// Event handler for 'Create' messages. This type is a subset of the MessageReceived event.
-        /// </summary>
-        public event EventHandler<CreateMessageReceivedEventArgs> CreateMessageReceived;
 
         public BotCommandManager CommandManager = new BotCommandManager();
 
@@ -61,11 +55,11 @@ namespace CurseSharp.CurseClient.Bot
             var loginRequest = new LoginEndpoint();
             Account = loginRequest.Login(new AccountModel { Username = username, Password = password });
             socket = new WebSocketWrapper("wss://notifications-v1.curseapp.net/");
-            socket.MessageReceived += Socket_MessageReceived;
+            socket.MessageReceived += Socket_WireMessageReceived; // Required so that the websocket can send events to the bot.
             socket.Connect();
             var isAlive = Task.Factory.StartNew(async delegate
             {
-                await Task.Delay(1000);
+                await Task.Delay(500);
                 return socket.IsAlive;
             }).Unwrap().Result;
             if(isAlive)
@@ -100,37 +94,22 @@ namespace CurseSharp.CurseClient.Bot
         }
 
         /// <summary>
-        /// 
+        /// POST conversations/{conversationID}/{id}-{timestamp}
         /// </summary>
-        /// <param name="conversationID">Channel or users ID. This can be retrieved from the contacts endpoint, or received when reading a users message.</param>
-        /// <param name="message"></param>
-        public void SendChatMessage(string conversationID, string message)
+        /// <param name="conversationID"></param>
+        /// <param name="editText"></param>
+        public void EditChatMessage(string conversationID, string editText)
         {
-            int maxWait = 3;
-            int currentWait = 0;
-            while(!socket.IsAlive || Account.UserData == null || Account.UserData.SessionID == null)
-            {
-#if VERBOSE_LOGGING
-                Log.Verbose($@"Socket isn't ready. Waiting... Socket: {socket.SocketID}");
-#endif
-                Thread.Sleep(1000);
-                currentWait++;
-                if(currentWait > maxWait)
-                {
-                    Log.Error($"Unable to send message to Socket: {socket.SocketID} - max timeout exceeded. Failed to send message to ConversationID: {conversationID}, Message: {message}");
-                    return;
-                }
-            }
-            var messageData = new SendChatMessageModel();
-            messageData.ConversationID = conversationID;
-            messageData.AttachmentID = "00000000-0000-0000-0000-000000000000";
-            messageData.ClientID = Account.UserData.SessionID;
-            messageData.Message = message;
+            throw new NotImplementedException();
+        }
 
-            var messageEnvelope = new MessageEnvelopeModel();
-            messageEnvelope.TypeID = NotificationType.ConversationMessageRequest;
-            messageEnvelope.Body = messageData;
-            socket.Send(JsonConvert.SerializeObject(messageEnvelope));
+        /// <summary>
+        /// DELETE conversations/{conversationID}/{id}-{timestamp}
+        /// </summary>
+        /// <param name="conversationid"></param>
+        public void DeleteChatMessage(string conversationID, string messageID, string timestamp)
+        {
+            throw new NotImplementedException();
         }
 
         /// <summary>
@@ -138,7 +117,7 @@ namespace CurseSharp.CurseClient.Bot
         /// </summary>
         private void Heartbeat()
         {
-            var sleepSeconds = 15; // Set default ping sleep for 15 seconds
+            var sleepSeconds = 60; // Set default ping sleep for 15 seconds
             var sleepTime = sleepSeconds * 1000; // Multiply sleep seconds by 1000 to get milliseconds.
 
             // The ping model never changes, so let's only create it once and reuse it.
@@ -152,118 +131,6 @@ namespace CurseSharp.CurseClient.Bot
             {
                 socket.Send(JsonConvert.SerializeObject(handshakeEnvelope));
                 Thread.Sleep(sleepTime);
-            }
-        }
-
-        /// <summary>
-        /// Action to take when a socket message is received
-        /// </summary>
-        private void Socket_MessageReceived(object sender, SocketMessageReceivedEventArgs e)
-        {
-            switch(e.MessageType)
-            {
-                case NotificationType.ConversationMessageNotification:
-                {
-                    ProcessConversationMessageNotification(e);
-                    break;
-                }
-                default:
-                {
-                    Log.Error($"NotificationType {Enum.GetName(typeof(NotificationType), e.MessageType)} ({e.MessageType}) has no defined message handling.");
-                    break;
-                }
-            }
-        }
-
-        /// <summary>
-        /// Determines what type of processing to do for a message
-        /// </summary>
-        private void ProcessConversationMessageNotification(SocketMessageReceivedEventArgs e)
-        {
-            // Determine what type of message was received
-            switch(e.Body.NotificationType)
-            {
-                // Normal chat message is received
-                case ConversationNotificationType.Normal:
-                {
-                    // Nobody is listening
-                    if(CreateMessageReceived == null)
-                    {
-                        return;
-                    }
-
-                    var args = new CreateMessageReceivedEventArgs()
-                    {
-                        SocketID = e.SocketID,
-                        ServerID = e.Body.ServerID,
-                        ChannelID = e.Body.RootConversationID,
-                        MessageTimestamp = e.Body.Timestamp,
-                        Mentions = e.Body.Mentions,
-                        ConversationNotificationType = e.Body.NotificationType,
-                        RecipientID = e.Body.RecipientID,
-                        Author = new AuthorModel() { UserID = e.Body.SenderID, Username = e.Body.SenderName},
-                        MessageBody = e.Body.Content
-                    };
-                    CreateMessageReceived?.Invoke(this, args);
-                    // Make sure there is a message, that the author is populated, and that the author is not the current bot user
-                    if(!string.IsNullOrWhiteSpace(args.MessageBody) && args.Author.UserID != 0
-                        && args.Author.UserID != Account.UserData.User.UserID
-                    )
-                    {
-                        ProcessMessageReceivedForCommands(args);
-                    }
-                    break;
-                }
-                // A user edited a previously received message
-                case ConversationNotificationType.Edited:
-                {
-                    break;
-                }
-                // A user clicked 'GG' next to a previously received message
-                case ConversationNotificationType.Liked:
-                {
-                    break;
-                }
-                // A user deleted a previously received message
-                case ConversationNotificationType.Deleted:
-                {
-                    break;
-                }
-            }
-        }
-
-        private void ProcessMessageReceivedForCommands(CreateMessageReceivedEventArgs message)
-        {
-            try
-            {
-                int length = message.MessageBody.IndexOf(' ');
-                // If no space is in the message, use the whole message to check for command.
-                if(length == -1)
-                {
-                    length = message.MessageBody.Length;
-                }
-                var checkcommand = message.MessageBody.Substring(0, length);
-
-                if(!CommandManager.Commands.ContainsKey(checkcommand))
-                {
-                    return;
-                }
-
-#if VERBOSE_LOGGING
-                Logging.Log.Verbose($"Command Trigger Detected: {checkcommand}");
-#endif
-                Task.Factory.StartNew(() =>
-                {
-                    CommandManager.Commands[checkcommand].ExecuteAction(new CommandTriggerModel() {Command = CommandManager.Commands[checkcommand], Message = message });
-                }, 
-                CommandManager.Commands[checkcommand].CancellationToken.Token, 
-                CommandManager.Commands[checkcommand].TaskCreationOptions, 
-                CommandManager.Commands[checkcommand].TaskScheduler
-                );
-            }
-            catch(Exception ex)
-            {
-                Logging.Log.Error(ex.ToString());
             }
         }
 

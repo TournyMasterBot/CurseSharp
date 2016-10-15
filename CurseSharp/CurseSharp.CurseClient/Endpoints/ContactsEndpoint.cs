@@ -1,5 +1,5 @@
 ﻿using CurseSharp.CurseClient.BotModels;
-using CurseSharp.CurseClient.Models.ContactModels;
+using CurseSharp.CurseClient.Models.CurseClientModels.ContactModels;
 using CuseSharp;
 using Newtonsoft.Json;
 using System;
