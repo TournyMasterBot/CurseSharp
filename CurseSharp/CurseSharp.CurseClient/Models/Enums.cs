@@ -1,4 +1,7 @@
-﻿namespace CurseSharp.CurseClient.Models
+﻿using System;
+using System.Runtime.Serialization;
+
+namespace CurseSharp.CurseClient.Models
 {
     /// <summary>
     /// Todo: Document. If you use an enum, try to document along the way!
@@ -13,6 +16,7 @@
             Curse = 0,
             Twitch = 1,
             YouTube = 2,
+            WorldOfWarcraft = 3
         }
 
         /// <summary>
@@ -27,6 +31,16 @@
             GroupEmoticon = 5,
             SyncedEmoticon = 6,
             GroupCover = 7,
+            TwitchEmote = 8
+        }
+
+        public enum BattleNetRegion
+        {
+            US = 1,
+            EU = 2,
+            KR = 3,
+            TW = 4,
+            CN = 5
         }
 
         /// <summary>
@@ -43,11 +57,30 @@
         /// </summary>
         public enum CallType
         {
+            /// <summary>
+            /// Created by clicking the Create button, or using the legacy API
+            /// </summary>        
             AdHoc = 1,
+
+            /// <summary>
+            /// Created via an auto match game session
+            /// </summary>
             AutoMatch = 2,
+
+            /// <summary>
+            /// Created by calling a friend directly (Secure)
+            /// </summary>
             Friend = 3,
+
+            /// <summary>
+            /// Created by initiating a group call (Secure)
+            /// </summary>
             Group = 4,
-            MultiFriend = 5,
+
+            /// <summary>
+            /// Created by adding friends to a call with another friend.
+            /// </summary>
+            MultiFriend = 5
         }
 
         /// <summary>
@@ -152,6 +185,8 @@
         {
             NeedsRelink = 0,
             Partnered = 1,
+            Linked = 2,
+            Unlinked = 3
         }
 
         /// <summary>
@@ -162,6 +197,7 @@
             Linked = 0,
             Unlinked = 1,
             LiveStatus = 2,
+            InfoChanged = 3
         }
 
         /// <summary>
@@ -309,6 +345,7 @@
             UpdateUserPresence = 15,
         }
 
+        /* Removed / Changed?
         /// <summary>
         /// 
         /// </summary>
@@ -322,17 +359,19 @@
             Role = 5,
             Channel = 6,
         }
+        */
 
         /// <summary>
         /// 
         /// </summary>
+        [Flags]
         public enum GroupEventChannelChangeFlags
         {
             None = 0,
             Title = 1,
-            Motd = 2,
-            Permissions = 4,
-            Access = 8,
+            Motd = 1 << 1,
+            Permissions = 1 << 2,
+            Access = 1 << 3
         }
 
         /// <summary>
@@ -348,29 +387,31 @@
         /// <summary>
         /// 
         /// </summary>
+        [Flags]
         public enum GroupEventRoleChangeFlags
         {
             None = 0,
             Name = 1,
-            Rank = 2,
-            Permissions = 4,
-            Color = 8,
-            Badge = 16,
+            Rank = 1 << 1,
+            Permissions = 1 << 2,
+            Color = 1 << 3,
+            Badge = 1 << 4,
         }
 
         /// <summary>
         /// 
         /// </summary>
+        [Flags]
         public enum GroupEventRootChangeFlags
         {
             None = 0,
             Title = 1,
-            Motd = 2,
-            VoiceRegion = 4,
-            AfkTimer = 8,
-            Access = 16,
-            ChatThrottle = 32,
-            SearchSettings = 64,
+            Motd = 1 << 1,
+            VoiceRegion = 1 << 2,
+            AfkTimer = 1 << 3,
+            Access = 1 << 4,
+            ChatThrottle = 1 << 5,
+            SearchSettings = 1 << 6,
         }
 
         /// <summary>
@@ -387,30 +428,55 @@
         /// <summary>
         /// 
         /// </summary>
+        public enum GroupEventCategory
+        {
+            Group = 0,
+            User = 1,
+            Giveaway = 2,
+            Poll = 3,
+            CommunityLink = 4,
+            Role = 5,
+            Channel = 6,
+            GuildLink = 7,
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
         public enum GroupEventType
         {
+            // Group Events
             GroupCreated = 1,
             GroupDeleted = 2,
             GroupSettingsChanged = 3,
+            // User Events
             UsersAdded = 2001,
             UsersRemoved = 2002,
             UserRolesAdded = 2003,
             UserRolesRemoved = 2004,
             UserNickname = 2005,
+            // Giveaway Events
             GiveawayStarted = 3001,
             GiveawayRoll = 3002,
             GiveawayEnded = 3003,
+            // Poll Events
             PollStarted = 4001,
             PollEnded = 4002,
+            // Community Link Events
             CommunityLinked = 5001,
             CommunityUnlinked = 5002,
             CommunitySettingsChanged = 5003,
+            // Channel Events
             ChannelCreated = 6001,
             ChannelRemoved = 6002,
             ChannelInfoChanged = 6003,
+            // Role Events
             RoleAdded = 7001,
             RoleRemoved = 7002,
             RoleInfoChanged = 7003,
+            // Guild Link Events
+            GuildLinked = 8001,
+            GuildUnlinked = 8002,
         }
 
         /// <summary>
@@ -496,16 +562,6 @@
         /// <summary>
         /// 
         /// </summary>
-        public enum GroupMemberRemovedReason
-        {
-            Left = 0,
-            Kicked = 1,
-            Banned = 2,
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
         public enum GroupMemberSearchSortType
         {
             Default = 0,
@@ -536,39 +592,139 @@
         /// <summary>
         /// 
         /// </summary>
-        public enum GroupPermissions
+        [DataContract]
+        [Flags]
+        public enum GroupPermissions : long
         {
+            [EnumMember]
             None = 0,
+            [EnumMember]
             All = -1,
+
+            /// <summary>
+            /// Grants access to the server and/or channel
+            /// </summary>
+            [EnumMember]
             Access = 1,
+
+            /// <summary>
+            /// Allows a user to change the title, roles and other server-level settings.
+            /// </summary>
+            [EnumMember]
             ManageServer = 2,
+
+            /// <summary>
+            /// Allows a user to create, edit and delete channels.
+            /// </summary>
+            [EnumMember]
             ManageChannels = 4,
+
+            /// <summary>
+            /// Allows a user to create a temporary voice channel, within a channel that allows it.
+            /// </summary>
+            [EnumMember]
             CreateTemporaryGroup = 8,
+
+            /// <summary>
+            /// Allows a user to view the admin panel (included viewing analytics and other stats)
+            /// </summary>
+            [EnumMember]
             AccessAdminPanel = 16,
+
+            /// <summary>
+            /// Invites a user to a group/server
+            /// </summary>
+            [EnumMember]
             InviteUsers = 32,
+
+            /// <summary>
+            /// Remove a user from the group/server
+            /// </summary>
+            [EnumMember]
             RemoveUser = 64,
+
+            /// <summary>
+            /// Allows a user to view and delete any active server invitations
+            /// </summary>
+            [EnumMember]
             ManageInvitations = 128,
+
+            /// <summary>
+            /// Allows a user to promote or demote another user, at their rank or lower.
+            /// </summary>
+            [EnumMember]
             ChangeUserRole = 256,
+
+
+            /// <summary>
+            /// Allows a user to ban another user, at their rank or lower
+            /// </summary>
+            [EnumMember]
             BanUser = 512,
+
+
+            // Voice Management        
+            [EnumMember]
             VoiceKickUser = 1024,
+            [EnumMember]
             VoiceMuteUser = 2048,
+            [EnumMember]
             VoiceDeafenUser = 4096,
+            [EnumMember]
             VoiceSpeak = 8192,
+            [EnumMember]
             VoiceMoveUser = 16384,
+            [EnumMember]
             VoiceChangeSettings = 32768,
+
+            // Chat
+            [EnumMember]
             ChatSendMessages = 65536,
+            [EnumMember]
             ChatEmbedLinks = 131072,
+            [EnumMember]
             ChatUploadPhotos = 262144,
+            [EnumMember]
             ChatAttachFiles = 524288,
+            [EnumMember]
             ChatReadHistory = 1048576,
+            [EnumMember]
             ChatMentionUsers = 2097152,
+            [EnumMember]
             ChatMentionEveryone = 4194304,
+            [EnumMember]
             ChatBypassChatThrottle = 268435456,
+
+            /// <summary>
+            /// Allows a user to edit and delete another user's chat messages (at their rank or below)
+            /// </summary>
+            [EnumMember]
             ChatModerateMessages = 8388608,
+
+
+            /// <summary>
+            /// Allows a user to send a private message to another user, regardless if they are friends
+            /// </summary>
+            [EnumMember]
             SendPrivateMessage = 16777216,
-            ManagePolls = 33554432,
-            ManageGiveaways = 67108864,
-            ChatEditOtherMessages = 134217728,
+
+            /// <summary>
+            /// Allows a user to run a poll.
+            /// </summary>
+            [EnumMember]
+            ManagePolls = 33554432L,
+
+            /// <summary>
+            /// Allows a user to run a giveaway.
+            /// </summary>
+            [EnumMember]
+            ManageGiveaways = 67108864L,
+
+            /// <summary>
+            /// Allows a user to edit another user's chat messages (at their rank or below)
+            /// </summary>
+            [EnumMember]
+            ChatEditOtherMessages = 134217728L,
         }
 
         /// <summary>
@@ -628,6 +784,16 @@
         /// <summary>
         /// 
         /// </summary>
+        public enum GroupMemberRemovedReason
+        {
+            Left = 0,
+            Kicked = 1,
+            Banned = 2
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
         public enum GroupRoleSource
         {
             Curse = 0,
@@ -645,6 +811,17 @@
             SyncedSubscriber = 2,
             SyncedModerator = 3,
             SyncedOwner = 4,
+
+            GuildMasterRank = 5,
+            GuildRank1 = 6,
+            GuildRank2 = 7,
+            GuildRank3 = 8,
+            GuildRank4 = 9,
+            GuildRank5 = 10,
+            GuildRank6 = 11,
+            GuildRank7 = 12,
+            GuildRank8 = 13,
+            GuildRank9 = 14,
         }
 
         /// <summary>
@@ -691,6 +868,10 @@
             Custom = 0,
             Guild = 1,
             Stream = 2,
+
+            WowNeutral = 3,
+            WowAlliance = 4,
+            WowHorde = 5,
         }
 
         /// <summary>
@@ -738,6 +919,12 @@
             OfficerChatNameLength = 8,
             PveChatNameLength = 9,
             PvpChatNameLength = 10,
+            DefaultVoiceChatNameLength = 11,
+
+            SyncedGuildCount = 12,
+            SyncedGuildNameLength = 13,
+            SyncedGuildRegion = 14,
+            SyncedGuildGameServerLength = 15
         }
 
         /// <summary>
