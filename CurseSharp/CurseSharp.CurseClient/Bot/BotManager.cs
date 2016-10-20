@@ -8,7 +8,6 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 using static CurseSharp.CurseClient.Models.Enums;
-using CurseSharp.CurseClient.Models.BotModels;
 
 namespace CurseSharp.CurseClient.Bot
 {
@@ -85,31 +84,11 @@ namespace CurseSharp.CurseClient.Bot
                 joinEnvelope.TypeID = NotificationType.ConversationMessageNotification;
                 joinEnvelope.Body = notifier;
                 socket.Send(JsonConvert.SerializeObject(joinEnvelope));
-
             }
             else
             {
                 Log.Error("Socket does not appear to be connected.");
             }
-        }
-
-        /// <summary>
-        /// POST conversations/{conversationID}/{id}-{timestamp}
-        /// </summary>
-        /// <param name="conversationID"></param>
-        /// <param name="editText"></param>
-        public void EditChatMessage(string conversationID, string editText)
-        {
-            throw new NotImplementedException();
-        }
-
-        /// <summary>
-        /// DELETE conversations/{conversationID}/{id}-{timestamp}
-        /// </summary>
-        /// <param name="conversationid"></param>
-        public void DeleteChatMessage(string conversationID, string messageID, string timestamp)
-        {
-            throw new NotImplementedException();
         }
 
         /// <summary>

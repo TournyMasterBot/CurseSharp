@@ -23,7 +23,7 @@ namespace CurseSharp.CurseClient.Bot
             public long Timestamp { get; set; }
             public int SenderID { get; set; }
             public string SenderName { get; set; }
-            public int SenderPermissions { get; set; }
+            public GroupPermissions SenderPermissions { get; set; }
             public int[] SenderRoles { get; set; }
             public int SenderVanityRole { get; set; }
             public int[] Mentions { get; set; }
@@ -58,6 +58,8 @@ namespace CurseSharp.CurseClient.Bot
             public long MessageTimestamp { get; set; }
             public string MessageBody { get; set; }
             public int[] Mentions { get; set; }
+            public GroupPermissions SenderPermissions { get; set; }
+            public int[] SenderRoles { get; set; }
         }
 
         public class EditMessageReceivedEventArgs : EventArgs
@@ -235,7 +237,9 @@ namespace CurseSharp.CurseClient.Bot
                             ConversationNotificationType = e.NotificationType,
                             RecipientID = e.RecipientID,
                             Author = new AuthorModel() { UserID = e.SenderID, Username = e.SenderName },
-                            MessageBody = e.Content
+                            MessageBody = e.Content,
+                            SenderPermissions = e.SenderPermissions,
+                            SenderRoles = e.SenderRoles.ToArray()
                         };
                         NewMessageReceived?.Invoke(this, args);
 

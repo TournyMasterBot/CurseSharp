@@ -33,6 +33,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.9.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -46,6 +50,33 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Commands\BanPhrases\BanPhraseManager.cs" />
+    <Compile Include="Commands\CommandParser.cs" />
+    <Compile Include="Commands\CustomCommands.cs" />
+    <Compile Include="FormControls\BanPhraseAdvancedControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="FormControls\BanPhraseAdvancedControl.Designer.cs">
+      <DependentUpon>BanPhraseAdvancedControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FormControls\BanPhraseListDisplayControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="FormControls\BanPhraseListDisplayControl.Designer.cs">
+      <DependentUpon>BanPhraseListDisplayControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FormControls\BanPhraseSimpleControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="FormControls\BanPhraseSimpleControl.Designer.cs">
+      <DependentUpon>BanPhraseSimpleControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\BanPhraseForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\BanPhraseForm.Designer.cs">
+      <DependentUpon>BanPhraseForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Main.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -55,6 +86,18 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Service\Bot.cs" />
+    <EmbeddedResource Include="FormControls\BanPhraseAdvancedControl.resx">
+      <DependentUpon>BanPhraseAdvancedControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormControls\BanPhraseListDisplayControl.resx">
+      <DependentUpon>BanPhraseListDisplayControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormControls\BanPhraseSimpleControl.resx">
+      <DependentUpon>BanPhraseSimpleControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\BanPhraseForm.resx">
+      <DependentUpon>BanPhraseForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Main.resx">
       <DependentUpon>Main.cs</DependentUpon>
     </EmbeddedResource>
@@ -67,6 +110,16 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <None Include="Commands\BanPhrases\BanPhraseList.ini">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Commands\BanPhrases\BanPhraseSafeGroups.ini">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Commands\BanPhrases\CommonLetterSubstitutions.ini">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -85,7 +138,12 @@
       <Project>{3df3c1fd-98c1-447c-a0f1-4733a0db40ef}</Project>
       <Name>CurseSharp.CurseClient</Name>
     </ProjectReference>
+    <ProjectReference Include="..\CurseSharp.Logging\CurseSharp.Logging.csproj">
+      <Project>{F222A354-E064-4064-8445-6021BE2429F9}</Project>
+      <Name>CurseSharp.Logging</Name>
+    </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

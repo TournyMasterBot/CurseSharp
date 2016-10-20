@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.menuStrip1 = new System.Windows.Forms.MenuStrip();
+            this.NavMenu = new System.Windows.Forms.MenuStrip();
             this.FileMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.QuitMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.SettingMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -52,20 +52,20 @@
             this.label6 = new System.Windows.Forms.Label();
             this.UsernameText = new System.Windows.Forms.TextBox();
             this.PasswordText = new System.Windows.Forms.TextBox();
-            this.menuStrip1.SuspendLayout();
+            this.NavMenu.SuspendLayout();
             this.SuspendLayout();
             // 
-            // menuStrip1
+            // NavMenu
             // 
-            this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.NavMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.FileMenuItem,
             this.SettingMenuItem,
             this.helpToolStripMenuItem});
-            this.menuStrip1.Location = new System.Drawing.Point(0, 0);
-            this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(606, 24);
-            this.menuStrip1.TabIndex = 0;
-            this.menuStrip1.Text = "menuStrip1";
+            this.NavMenu.Location = new System.Drawing.Point(0, 0);
+            this.NavMenu.Name = "NavMenu";
+            this.NavMenu.Size = new System.Drawing.Size(624, 24);
+            this.NavMenu.TabIndex = 0;
+            this.NavMenu.Text = "menuStrip1";
             // 
             // FileMenuItem
             // 
@@ -78,7 +78,7 @@
             // QuitMenuItem
             // 
             this.QuitMenuItem.Name = "QuitMenuItem";
-            this.QuitMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.QuitMenuItem.Size = new System.Drawing.Size(97, 22);
             this.QuitMenuItem.Text = "Quit";
             // 
             // SettingMenuItem
@@ -96,38 +96,43 @@
             this.ManageProfilesMenuItem.Name = "ManageProfilesMenuItem";
             this.ManageProfilesMenuItem.Size = new System.Drawing.Size(227, 22);
             this.ManageProfilesMenuItem.Text = "Manage Profiles";
+            this.ManageProfilesMenuItem.Visible = false;
             // 
             // ManageBannedPhrasesMenuItem
             // 
             this.ManageBannedPhrasesMenuItem.Name = "ManageBannedPhrasesMenuItem";
             this.ManageBannedPhrasesMenuItem.Size = new System.Drawing.Size(227, 22);
             this.ManageBannedPhrasesMenuItem.Text = "Manage Banned Phrases";
+            this.ManageBannedPhrasesMenuItem.Click += new System.EventHandler(this.ManageBannedPhrasesMenuItem_Click);
             // 
             // ManageCustomCommandsMenuItem
             // 
             this.ManageCustomCommandsMenuItem.Name = "ManageCustomCommandsMenuItem";
             this.ManageCustomCommandsMenuItem.Size = new System.Drawing.Size(227, 22);
             this.ManageCustomCommandsMenuItem.Text = "Manage Custom Commands";
+            this.ManageCustomCommandsMenuItem.Visible = false;
             // 
             // helpToolStripMenuItem
             // 
             this.helpToolStripMenuItem.Name = "helpToolStripMenuItem";
             this.helpToolStripMenuItem.Size = new System.Drawing.Size(44, 20);
             this.helpToolStripMenuItem.Text = "Help";
+            this.helpToolStripMenuItem.Visible = false;
             // 
             // SendTestMessage
             // 
-            this.SendTestMessage.Location = new System.Drawing.Point(12, 28);
+            this.SendTestMessage.Location = new System.Drawing.Point(12, 406);
             this.SendTestMessage.Name = "SendTestMessage";
             this.SendTestMessage.Size = new System.Drawing.Size(115, 23);
             this.SendTestMessage.TabIndex = 1;
             this.SendTestMessage.Text = "Send Test Message";
             this.SendTestMessage.UseVisualStyleBackColor = true;
+            this.SendTestMessage.Visible = false;
             this.SendTestMessage.Click += new System.EventHandler(this.SendTestMessage_Click);
             // 
             // DeleteMessageText
             // 
-            this.DeleteMessageText.Location = new System.Drawing.Point(12, 57);
+            this.DeleteMessageText.Location = new System.Drawing.Point(12, 28);
             this.DeleteMessageText.Name = "DeleteMessageText";
             this.DeleteMessageText.Size = new System.Drawing.Size(115, 23);
             this.DeleteMessageText.TabIndex = 2;
@@ -137,7 +142,7 @@
             // 
             // ConversationIDText
             // 
-            this.ConversationIDText.Location = new System.Drawing.Point(101, 119);
+            this.ConversationIDText.Location = new System.Drawing.Point(101, 90);
             this.ConversationIDText.Name = "ConversationIDText";
             this.ConversationIDText.Size = new System.Drawing.Size(100, 20);
             this.ConversationIDText.TabIndex = 3;
@@ -145,7 +150,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(12, 122);
+            this.label1.Location = new System.Drawing.Point(12, 93);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(83, 13);
             this.label1.TabIndex = 4;
@@ -154,7 +159,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(12, 153);
+            this.label2.Location = new System.Drawing.Point(12, 124);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(61, 13);
             this.label2.TabIndex = 5;
@@ -163,7 +168,7 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(12, 179);
+            this.label3.Location = new System.Drawing.Point(12, 150);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(58, 13);
             this.label3.TabIndex = 6;
@@ -171,21 +176,21 @@
             // 
             // MessageIDText
             // 
-            this.MessageIDText.Location = new System.Drawing.Point(101, 150);
+            this.MessageIDText.Location = new System.Drawing.Point(101, 121);
             this.MessageIDText.Name = "MessageIDText";
             this.MessageIDText.Size = new System.Drawing.Size(100, 20);
             this.MessageIDText.TabIndex = 7;
             // 
             // TimestampText
             // 
-            this.TimestampText.Location = new System.Drawing.Point(101, 176);
+            this.TimestampText.Location = new System.Drawing.Point(101, 147);
             this.TimestampText.Name = "TimestampText";
             this.TimestampText.Size = new System.Drawing.Size(100, 20);
             this.TimestampText.TabIndex = 8;
             // 
             // EditMessage
             // 
-            this.EditMessage.Location = new System.Drawing.Point(12, 86);
+            this.EditMessage.Location = new System.Drawing.Point(12, 57);
             this.EditMessage.Name = "EditMessage";
             this.EditMessage.Size = new System.Drawing.Size(115, 23);
             this.EditMessage.TabIndex = 9;
@@ -196,7 +201,7 @@
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(12, 207);
+            this.label4.Location = new System.Drawing.Point(12, 178);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(71, 13);
             this.label4.TabIndex = 11;
@@ -204,7 +209,7 @@
             // 
             // EditMessageText
             // 
-            this.EditMessageText.Location = new System.Drawing.Point(101, 204);
+            this.EditMessageText.Location = new System.Drawing.Point(101, 175);
             this.EditMessageText.Name = "EditMessageText";
             this.EditMessageText.Size = new System.Drawing.Size(100, 20);
             this.EditMessageText.TabIndex = 10;
@@ -255,7 +260,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(606, 460);
+            this.ClientSize = new System.Drawing.Size(624, 441);
             this.Controls.Add(this.PasswordText);
             this.Controls.Add(this.UsernameText);
             this.Controls.Add(this.label6);
@@ -272,12 +277,12 @@
             this.Controls.Add(this.ConversationIDText);
             this.Controls.Add(this.DeleteMessageText);
             this.Controls.Add(this.SendTestMessage);
-            this.Controls.Add(this.menuStrip1);
-            this.MainMenuStrip = this.menuStrip1;
+            this.Controls.Add(this.NavMenu);
+            this.MainMenuStrip = this.NavMenu;
             this.Name = "Main";
             this.Text = "CurseSharp";
-            this.menuStrip1.ResumeLayout(false);
-            this.menuStrip1.PerformLayout();
+            this.NavMenu.ResumeLayout(false);
+            this.NavMenu.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -285,7 +290,7 @@
 
         #endregion
 
-        private System.Windows.Forms.MenuStrip menuStrip1;
+        private System.Windows.Forms.MenuStrip NavMenu;
         private System.Windows.Forms.ToolStripMenuItem FileMenuItem;
         private System.Windows.Forms.ToolStripMenuItem QuitMenuItem;
         private System.Windows.Forms.ToolStripMenuItem SettingMenuItem;

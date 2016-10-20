@@ -3,6 +3,34 @@ using System.Runtime.Serialization;
 
 namespace CurseSharp.CurseClient.Models
 {
+    #region CurseSharp Enums
+    public enum BanPhraseResponse
+    {
+        DoNothing = 0,
+        Edit = 1,
+        Delete = 2,
+        Timeout = 3,
+        Ban = 4
+    }
+
+    public enum BanPhraseCheckType
+    {
+        ExactMatch = 0,
+        ContainsMatch = 1
+    }
+
+    [Flags]
+    public enum BanPhraseOptions
+    {
+        None = 0,
+        CheckForCommonSpellingVariants = 1,
+        LogActionsTaken = 1 << 1
+    }
+
+    #endregion
+
+    #region Curse App Enums
+
     /// <summary>
     /// Todo: Document. If you use an enum, try to document along the way!
     /// </summary>
@@ -32,6 +60,14 @@ namespace CurseSharp.CurseClient.Models
             SyncedEmoticon = 6,
             GroupCover = 7,
             TwitchEmote = 8
+        }
+
+        public enum BanUserMessageDeleteMode
+        {
+            None = 0,
+            LastDay = 1,
+            LastWeek = 2,
+            All = 3
         }
 
         public enum BattleNetRegion
@@ -1320,4 +1356,5 @@ namespace CurseSharp.CurseClient.Models
             MultiFriend = 5,
         }
     }
+    #endregion
 }

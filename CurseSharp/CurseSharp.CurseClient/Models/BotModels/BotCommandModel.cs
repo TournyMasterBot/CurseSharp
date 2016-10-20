@@ -8,6 +8,7 @@ namespace CurseSharp.CurseClient.Models.BotModels
     {
         public string CommandTrigger { get; set; }
         public string CommandCall { get; set; }
+        public int[] AllowedGroupRoles { get; set; }
         public string HelpText { get; set; }
         public TaskCreationOptions TaskCreationOptions { get; set; }
         public TaskScheduler TaskScheduler { get; set; }

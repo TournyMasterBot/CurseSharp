@@ -1,9 +1,9 @@
-﻿using CurseSharp.CurseClient.Endpoints;
+﻿using CurseSharp.CurseClient.Bot;
+using CurseSharp.CurseClient.Endpoints;
+using CurseSharp.UI.Commands;
+using CurseSharp.UI.Commands.BanPhrases;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CurseSharp.UI.Service
 {
@@ -12,10 +12,11 @@ namespace CurseSharp.UI.Service
         private static volatile Bot instance;
         private static object syncRoot = new Object();
 
-        public static CurseClient.Bot.BotManager Client = null;
+        public static BotManager Client = null;
         // Test debug stuff
         public static ContactsEndpoint AvailableChannels = new ContactsEndpoint();
         public static string TestChannel = String.Empty;
+        public static string CommandTrigger = String.Empty;
 
         private Bot()
         {
@@ -41,7 +42,15 @@ namespace CurseSharp.UI.Service
             }
         }
 
-        public static void AssignTestChannel()
+        public static void InitializeBot()
+        {
+            CommandTrigger = "!";
+            CustomCommands.AddDemoCommands();
+            AssignTestChannel();
+            Bot.Client.NewMessageReceived += CommandParser.ProcessNewMessage;
+        }
+
+        private static void AssignTestChannel()
         {
             var contactData = AvailableChannels.GetContacts(Client.Account);
             TestChannel =

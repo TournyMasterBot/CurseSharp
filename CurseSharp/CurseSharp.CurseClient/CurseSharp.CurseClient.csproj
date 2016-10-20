@@ -58,9 +58,14 @@
     <Compile Include="Events\BotManagerEvents.cs" />
     <Compile Include="Events\WebSocketWrapperEvents.cs" />
     <Compile Include="Extensions\JsonExtensions.cs" />
+    <Compile Include="Extensions\StringExtensions.cs" />
+    <Compile Include="Helpers\DataTableHelper.cs" />
     <Compile Include="Models\BotModels\AccountModel.cs" />
+    <Compile Include="Models\BotModels\BanPhraseModel.cs" />
+    <Compile Include="Models\BotModels\BanWordHandlerModel.cs" />
     <Compile Include="Models\BotModels\BotCommandModel.cs" />
     <Compile Include="Models\BotModels\CommandTriggerModel.cs" />
+    <Compile Include="Models\CurseClientModels\MessageModels\BanUserMessageModel.cs" />
     <Compile Include="Models\CurseClientModels\MessageModels\DeleteChatMessageModel.cs" />
     <Compile Include="Models\CurseClientModels\MessageModels\EditChatMessageModel.cs" />
     <Compile Include="Models\CurseClientModels\MessageModels\SendChatMessageModel.cs" />

@@ -7,6 +7,7 @@ using System.Collections.Specialized;
 using System.Diagnostics;
 using System.IO;
 using System.Net;
+using System.Threading;
 
 namespace CuseSharp
 {
@@ -44,8 +45,40 @@ namespace CuseSharp
             }
             catch(WebException ex)
             {
-                Log.Error(ex.Message);
-                throw;
+                var response = ex.Response as HttpWebResponse;
+
+                bool success = false;
+                int currentretry = 0;
+                int maxretries = 3;
+                if((int)response.StatusCode == 404)
+                {
+                    while(currentretry < maxretries && !success)
+                    {
+                        Thread.Sleep(1000);
+                        currentretry++;
+                        try
+                        {
+                            var httpResponse = (HttpWebResponse)httpRequest.GetResponse();
+                            using(var sr = new StreamReader(httpResponse.GetResponseStream()))
+                            {
+                                var result = sr.ReadToEnd();
+                                if(!string.IsNullOrEmpty(result))
+                                {
+                                    return result;
+                                }
+                            }
+                            success = true;
+                        }
+                        catch(Exception)
+                        {
+                            success = false;
+                        }
+                    }
+                    if(!success)
+                    {
+                        Log.Error(ex.ToString());
+                    }
+                }
             }
             return "";
         }
@@ -133,27 +166,90 @@ namespace CuseSharp
             catch(WebException ex)
             {
                 var response = ex.Response as HttpWebResponse;
-                using(var sr = new StreamReader(response.GetResponseStream()))
-                {
-                    var result = sr.ReadToEnd();
-                    if(!string.IsNullOrEmpty(result))
-                    {
-                        throw new InvalidDataException(result);
-                    }
-                }
 
-                if((int)response.StatusCode == 400)
+                if((int)response.StatusCode == 404)
                 {
-                }
-                if((int)response.StatusCode == 401)
-                {
-                    // Invalid token was passed.
-                    throw;
+                    bool success = false;
+                    int currentretry = 0;
+                    int maxretries = 3;
+                    while(currentretry < maxretries && !success)
+                    {
+                        Thread.Sleep(1000);
+                        currentretry++;
+                        try
+                        {
+                            var httpRequest = (HttpWebRequest)WebRequest.Create(url);
+                            httpRequest.Headers.Add($"AuthenticationToken: {account.SessionData.Session.Token}");
+                            httpRequest.ContentLength = message.Length;
+                            httpRequest.ContentType = "application/json";
+                            httpRequest.Method = "POST";
+                            httpRequest.UserAgent += $" {UserAgentString}";
+
+                            if(!string.IsNullOrEmpty(message))
+                            {
+#if VERBOSE_LOGGING
+                                Log.Verbose($">> {message}");
+#endif
+                                using(var sw = new StreamWriter(httpRequest.GetRequestStream()))
+                                {
+                                    sw.Write(message);
+                                    sw.Flush();
+                                    sw.Close();
+                                }
+                            }
+                            var httpResponse = (HttpWebResponse)httpRequest.GetResponse();
+                            if(httpResponse.StatusCode == HttpStatusCode.Unauthorized)
+                            {
+                                throw new UnauthorizedAccessException("401");
+                            }
+                            using(var sr = new StreamReader(httpResponse.GetResponseStream()))
+                            {
+                                var result = sr.ReadToEnd();
+                                if(!string.IsNullOrEmpty(result))
+                                {
+#if VERBOSE_LOGGING
+                                    Log.Verbose($"<< {result}");
+#endif
+                                    return result;
+                                }
+                            }
+                            success = true;
+                        }
+                        catch(Exception)
+                        {
+                            success = false;
+                        }
+                    }
+                    if(!success)
+                    {
+                        Log.Error(ex.ToString());
+                    }
                 }
                 else
                 {
-                    throw;
+                    using(var sr = new StreamReader(response.GetResponseStream()))
+                    {
+                        var result = sr.ReadToEnd();
+                        if(!string.IsNullOrEmpty(result))
+                        {
+                            throw new InvalidDataException(result);
+                        }
+                    }
+
+                    if((int)response.StatusCode == 400)
+                    {
+                    }
+                    if((int)response.StatusCode == 401)
+                    {
+                        // Invalid token was passed.
+                        throw;
+                    }
+                    else
+                    {
+                        throw;
+                    }
                 }
+                
             }
             catch(Exception ex)
             {

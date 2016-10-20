@@ -1,14 +1,9 @@
 ﻿using CurseSharp.CurseClient.Endpoints;
+using CurseSharp.UI.Commands;
+using CurseSharp.UI.Commands.BanPhrases;
+using CurseSharp.UI.Forms;
 using CurseSharp.UI.Service;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Diagnostics;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace CurseSharp.UI
@@ -18,16 +13,20 @@ namespace CurseSharp.UI
         public Main()
         {
             InitializeComponent();
+            InitializeBotSettings();
+
             PasswordText.PasswordChar = '*';
+        }
+
+        private void InitializeBotSettings()
+        {
+            BanPhraseManager.LoadBanPhrases();
         }
 
         private void Connect_Click(object sender, EventArgs e)
         {
-            Task.Factory.StartNew(() =>
-            {
-                StartBot(UsernameText.Text, PasswordText.Text);
-                Bot.AssignTestChannel();
-            });
+            StartBot(UsernameText.Text, PasswordText.Text);
+            Bot.InitializeBot();
         }
 
         private void SendTestMessage_Click(object sender, EventArgs e)
@@ -70,6 +69,17 @@ namespace CurseSharp.UI
         {
             Bot.Client = new CurseClient.Bot.BotManager();
             Bot.Client.Run(username, password);
+        }
+
+        private void ManageBannedPhrasesMenuItem_Click(object sender, EventArgs e)
+        {
+            var banPhraseForm = new BanPhraseForm();
+            banPhraseForm.Show();
+        }
+
+        private void QuitMenuItem_Click(object sender, EventArgs e)
+        {
+            Application.Exit();
         }
     }
 }

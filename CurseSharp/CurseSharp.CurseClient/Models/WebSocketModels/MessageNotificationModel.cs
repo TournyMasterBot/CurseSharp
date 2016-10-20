@@ -30,7 +30,7 @@ namespace CurseSharp.CurseClient.WebSocketModels
         public long Timestamp { get; set; }
         public int SenderID { get; set; }
         public string SenderName { get; set; }
-        public int SenderPermissions { get; set; }
+        public GroupPermissions SenderPermissions { get; set; }
         public List<int> SenderRoles { get; set; }
         public int SenderVanityRole { get; set; }
         public int[] Mentions { get; set; }
