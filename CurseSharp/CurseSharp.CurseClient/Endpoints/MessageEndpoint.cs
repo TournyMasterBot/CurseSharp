@@ -39,7 +39,7 @@ namespace CurseSharp.CurseClient.Endpoints
             WebWrapper.Post($"{MessageUrl}{conversationID}", account, JsonConvert.SerializeObject(messageData));
         }
 
-        public static void BanUser(AccountModel account, string conversationID, string userID, string reason, bool banIP, Enums.BanUserMessageDeleteMode messageDeleteMode)
+        public static void BanUser(AccountModel account, string conversationID, int userID, string reason, bool banIP, Enums.BanUserMessageDeleteMode messageDeleteMode)
         {
             if(account == null)
             {
@@ -51,39 +51,29 @@ namespace CurseSharp.CurseClient.Endpoints
                 throw new ArgumentNullException("conversationID");
             }
 
-            if(string.IsNullOrWhiteSpace(userID))
-            {
-                throw new ArgumentNullException("userID");
-            }
-
             if(string.IsNullOrWhiteSpace(reason))
             {
                 throw new ArgumentNullException("reason");
             }
 
             var messageData = new BanUserMessageModel();
-            messageData.UserID = int.Parse(userID);
+            messageData.UserID = userID;
             messageData.Reason = reason;
             messageData.BanIP = banIP;
             messageData.MessageDeleteMode = messageDeleteMode;
             WebWrapper.Post($"https://groups-v1.curseapp.net/servers/{conversationID}/bans", account, JsonConvert.SerializeObject(messageData));
         }
 
-        public static void UnbanUser(AccountModel account, string conversationID, string userID, string reason, bool banIP, Enums.BanUserMessageDeleteMode messageDeleteMode)
+        public static void UnbanUser(AccountModel account, string serverID, int userID, string reason, bool banIP, Enums.BanUserMessageDeleteMode messageDeleteMode)
         {
             if(account == null)
             {
                 throw new ArgumentNullException("account");
             }
 
-            if(string.IsNullOrWhiteSpace(conversationID))
+            if(string.IsNullOrWhiteSpace(serverID))
             {
                 throw new ArgumentNullException("conversationID");
-            }
-
-            if(string.IsNullOrWhiteSpace(userID))
-            {
-                throw new ArgumentNullException("userID");
             }
 
             if(string.IsNullOrWhiteSpace(reason))
@@ -92,11 +82,11 @@ namespace CurseSharp.CurseClient.Endpoints
             }
 
             var messageData = new BanUserMessageModel();
-            messageData.UserID = int.Parse(userID);
+            messageData.UserID = userID;
             messageData.Reason = reason;
             messageData.BanIP = banIP;
             messageData.MessageDeleteMode = messageDeleteMode;
-            WebWrapper.Delete($"https://groups-v1.curseapp.net/servers/{conversationID}/bans/{userID}", account.SessionData.Session.Token);
+            WebWrapper.Delete($"https://groups-v1.curseapp.net/servers/{serverID}/bans/{userID}", account.SessionData.Session.Token);
         }
 
         public static void DeleteMessage(AccountModel account, string conversationID, string messageID, string timestamp)

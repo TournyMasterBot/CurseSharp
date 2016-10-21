@@ -101,7 +101,7 @@ namespace CurseSharp.UI.Commands
             if(banUser)
             {
                 MessageEndpoint.DeleteMessage(Bot.Client.Account, e.ConversationID, e.ServerID, e.MessageTimestamp.ToString());
-                MessageEndpoint.BanUser(Bot.Client.Account, e.ConversationID, e.Author.UserID.ToString(), "Banned Phrase Usage", false, Enums.BanUserMessageDeleteMode.None);
+                MessageEndpoint.BanUser(Bot.Client.Account, e.RootConversationID, e.Author.UserID, "Banned Phrase Usage", false, Enums.BanUserMessageDeleteMode.None);
             }
             else if(deleteMessage)
             {
