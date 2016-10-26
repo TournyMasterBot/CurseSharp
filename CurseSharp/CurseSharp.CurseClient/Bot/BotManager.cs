@@ -47,6 +47,16 @@ namespace CurseSharp.CurseClient.Bot
         /// <param name="password">Curse Password</param>
         public void Run(string username, string password)
         {
+            if(string.IsNullOrWhiteSpace(username))
+            {
+                throw new FormatException("Username must be populated.");
+            }
+
+            if(string.IsNullOrWhiteSpace(password))
+            {
+                throw new FormatException("Password must be populated");
+            }
+
 #if VERBOSE_LOGGING
             Log.Verbose("Bot Started");
 #endif
@@ -58,7 +68,7 @@ namespace CurseSharp.CurseClient.Bot
             socket.Connect();
             var isAlive = Task.Factory.StartNew(async delegate
             {
-                await Task.Delay(500);
+                await Task.Delay(1000);
                 return socket.IsAlive;
             }).Unwrap().Result;
             if(isAlive)

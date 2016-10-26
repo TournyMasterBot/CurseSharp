@@ -1,4 +1,6 @@
-﻿using CurseSharp.CurseClient.WebSocketModels;
+﻿using CurseSharp.CurseClient.Models;
+using CurseSharp.CurseClient.Sessions;
+using CurseSharp.CurseClient.WebSocketModels;
 using CurseSharp.Logging;
 using Newtonsoft.Json;
 using System;
@@ -127,7 +129,7 @@ namespace CuseSharp.Sockets
                 {
                     SocketID = this.SocketID
                 };
-
+                SessionState.ConnectionStatus = BotConnectionStatus.Disconnected;
                 SocketClosed?.Invoke(this, args);
             };
 
@@ -144,6 +146,8 @@ namespace CuseSharp.Sockets
                 {
                     SocketID = SocketID
                 };
+
+                SessionState.ConnectionStatus = BotConnectionStatus.Connected;
                 SocketOpened?.Invoke(this, args);
             };
 

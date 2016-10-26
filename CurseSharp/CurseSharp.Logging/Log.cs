@@ -37,7 +37,7 @@ namespace CurseSharp.Logging
         /// <summary>
         /// Base location to write log files. When no drive is specified, it will log from the application's running directory.
         /// </summary>
-        private const string logBasePath = @"Logs\";
+        private static string logBasePath = $@"{AppDomain.CurrentDomain.BaseDirectory}Logs\";
         /// <summary>
         /// Minimum log level required to take action on log request. Used for filtering non-required messages.
         /// </summary>

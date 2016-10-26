@@ -5,6 +5,7 @@ using static CurseSharp.CurseClient.Models.Enums;
 using static CuseSharp.Sockets.WebSocketWrapper;
 using CurseSharp.CurseClient.WebSocketModels;
 using Newtonsoft.Json;
+using CurseSharp.CurseClient.Sessions;
 
 namespace CurseSharp.CurseClient.Bot
 {
@@ -60,6 +61,16 @@ namespace CurseSharp.CurseClient.Bot
             public int[] Mentions { get; set; }
             public GroupPermissions SenderPermissions { get; set; }
             public int[] SenderRoles { get; set; }
+        }
+
+        public class ConnectionOpenedEventArgs : EventArgs
+        {
+            public string SocketID { get; set; }
+        }
+
+        public class ConnectionClosedEventArgs : EventArgs
+        {
+            public string SocketID { get; set; }
         }
 
         public class EditMessageReceivedEventArgs : EventArgs

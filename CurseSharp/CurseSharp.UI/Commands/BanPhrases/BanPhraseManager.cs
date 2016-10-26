@@ -13,29 +13,71 @@ namespace CurseSharp.UI.Commands.BanPhrases
 {
     public static class BanPhraseManager
     {
+        private static string path = AppDomain.CurrentDomain.BaseDirectory;
         private static Dictionary<string, BanPhraseModel> BanPhrases = new Dictionary<string, BanPhraseModel>();
 
         public static void LoadBanPhrases()
         {
-            var data = File.ReadAllText(@"Commands\BanPhrases\BanPhraseList.ini", Encoding.UTF8);
-            if(!string.IsNullOrWhiteSpace(data))
+            try
             {
-                var banPhrases = JsonConvert.DeserializeObject<Dictionary<string, BanPhraseModel>>(data);
-                if(BanPhrases != null)
+                var data = File.ReadAllText($@"{path}Commands\BanPhrases\BanPhraseList.ini", Encoding.UTF8);
+                if(!string.IsNullOrWhiteSpace(data))
                 {
-                    BanPhrases = banPhrases;
+                    var banPhrases = JsonConvert.DeserializeObject<Dictionary<string, BanPhraseModel>>(data);
+                    if(BanPhrases != null && banPhrases.Count > 0)
+                    {
+                        BanPhrases = banPhrases;
+                    }
+                    else
+                    {
+                        LoadEmptyPhrase();
+                    }
                 }
+            }
+            catch(Exception ex)
+            {
+                Logging.Log.Error(ex.ToString());
+            }
+        }
+
+        public static void LoadEmptyPhrase()
+        {
+            try
+            {
+                var data = File.ReadAllText($@"{path}Commands\BanPhrases\EmptyBanPhrase.ini", Encoding.UTF8);
+                if(!string.IsNullOrWhiteSpace(data))
+                {
+                    var banPhrases = JsonConvert.DeserializeObject<Dictionary<string, BanPhraseModel>>(data);
+                    if(BanPhrases != null)
+                    {
+                        BanPhrases = banPhrases;
+                    }
+                }
+            }
+            catch(Exception ex)
+            {
+                Logging.Log.Error(ex.ToString());
             }
         }
 
         public static BanPhraseModel[] GetBanPhrases()
         {
-            return BanPhrases.Values.ToArray();
+            var phrases = BanPhrases.Values.ToArray();
+            if(phrases.Length == 0)
+            {
+                LoadEmptyPhrase();
+            }
+            phrases = BanPhrases.Values.OrderBy(x => x.BadPhrase).ToArray();
+            return phrases;
         }
 
         public static void SaveBanPhrases()
         {
-            File.WriteAllText(@"Commands\BanPhrases\BanPhraseList.ini", JsonConvert.SerializeObject(BanPhrases, Formatting.Indented));
+            if(BanPhrases.Keys.Contains(""))
+            {
+                BanPhrases.Remove("");
+            }
+            File.WriteAllText($@"{path}Commands\BanPhrases\BanPhraseList.ini", JsonConvert.SerializeObject(BanPhrases, Formatting.Indented));
         }
 
         public static void CreateBanPhrase(BanPhraseModel phraseDetails)
@@ -65,6 +107,11 @@ namespace CurseSharp.UI.Commands.BanPhrases
             foreach(var item in itemsToRemove)
             {
                 BanPhrases.Remove(item);
+            }
+
+            if(BanPhrases.Count == 0)
+            {
+                LoadEmptyPhrase();
             }
             SaveBanPhrases();
         }
@@ -127,7 +174,7 @@ namespace CurseSharp.UI.Commands.BanPhrases
                                 if(phrase.Response.HasFlag(BanPhraseResponse.Edit))
                                 {
                                     var regexMatch = Regex.Match(sourceLine, $@"(.*)(?:^|\s)(.*{phrase.BadPhrase}.*?)(?:\s|$)(.*)", RegexOptions.IgnoreCase);
-                                    result.EditMessage = $"{regexMatch.Groups[1].Captures[0].Value} *** {regexMatch.Groups[3].Captures[0].Value}";
+                                    result.EditMessage = $"{regexMatch.Groups[1].Captures[0].Value} {regexMatch.Groups[3].Captures[0].Value}"; // Be careful not to return an "" response, use at least one space
                                 }
 
                             }

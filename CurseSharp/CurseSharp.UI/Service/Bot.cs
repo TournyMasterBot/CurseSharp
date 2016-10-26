@@ -1,5 +1,6 @@
 ﻿using CurseSharp.CurseClient.Bot;
 using CurseSharp.CurseClient.Endpoints;
+using CurseSharp.CurseClient.Models;
 using CurseSharp.UI.Commands;
 using CurseSharp.UI.Commands.BanPhrases;
 using System;
@@ -48,6 +49,16 @@ namespace CurseSharp.UI.Service
             CustomCommands.AddDemoCommands();
             AssignTestChannel();
             Bot.Client.NewMessageReceived += CommandParser.ProcessNewMessage;
+        }
+
+        private static void ConnectionClosed(object sender, BotManager.ConnectionClosedEventArgs e)
+        {
+            throw new NotImplementedException();
+        }
+
+        private static void ConnectionOpened(object sender, BotManager.ConnectionOpenedEventArgs e)
+        {
+            throw new NotImplementedException();
         }
 
         private static void AssignTestChannel()

@@ -28,44 +28,211 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.NavMenu = new System.Windows.Forms.MenuStrip();
+            this.ContentSplitContainer = new System.Windows.Forms.SplitContainer();
+            this.ConnectionStatusText = new System.Windows.Forms.Label();
+            this.LoginDetailsLabel = new System.Windows.Forms.Label();
+            this.DeleteAndBanText = new System.Windows.Forms.TextBox();
+            this.DeleteAndBanLabel = new System.Windows.Forms.Label();
+            this.DeletedText = new System.Windows.Forms.TextBox();
+            this.DeletedLabel = new System.Windows.Forms.Label();
+            this.EditText = new System.Windows.Forms.TextBox();
+            this.EditLabel = new System.Windows.Forms.Label();
+            this.StatsLabel = new System.Windows.Forms.Label();
+            this.ConnectionStatusLabel = new System.Windows.Forms.Label();
+            this.SaveLoginDetailsCheckbox = new System.Windows.Forms.CheckBox();
+            this.PasswordText = new System.Windows.Forms.TextBox();
+            this.UsernameText = new System.Windows.Forms.TextBox();
+            this.PasswordLabel = new System.Windows.Forms.Label();
+            this.UsernameLabel = new System.Windows.Forms.Label();
+            this.ConnectButton = new System.Windows.Forms.Button();
             this.FileMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.QuitMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.SettingMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.ManageProfilesMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.ManageBannedPhrasesMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.ManageCustomCommandsMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.SendTestMessage = new System.Windows.Forms.Button();
-            this.DeleteMessageText = new System.Windows.Forms.Button();
-            this.ConversationIDText = new System.Windows.Forms.TextBox();
-            this.label1 = new System.Windows.Forms.Label();
-            this.label2 = new System.Windows.Forms.Label();
-            this.label3 = new System.Windows.Forms.Label();
-            this.MessageIDText = new System.Windows.Forms.TextBox();
-            this.TimestampText = new System.Windows.Forms.TextBox();
-            this.EditMessage = new System.Windows.Forms.Button();
-            this.label4 = new System.Windows.Forms.Label();
-            this.EditMessageText = new System.Windows.Forms.TextBox();
-            this.Connect = new System.Windows.Forms.Button();
-            this.label5 = new System.Windows.Forms.Label();
-            this.label6 = new System.Windows.Forms.Label();
-            this.UsernameText = new System.Windows.Forms.TextBox();
-            this.PasswordText = new System.Windows.Forms.TextBox();
+            this.NavMenu = new System.Windows.Forms.MenuStrip();
+            ((System.ComponentModel.ISupportInitialize)(this.ContentSplitContainer)).BeginInit();
+            this.ContentSplitContainer.Panel1.SuspendLayout();
+            this.ContentSplitContainer.SuspendLayout();
             this.NavMenu.SuspendLayout();
             this.SuspendLayout();
             // 
-            // NavMenu
+            // ContentSplitContainer
             // 
-            this.NavMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.FileMenuItem,
-            this.SettingMenuItem,
-            this.helpToolStripMenuItem});
-            this.NavMenu.Location = new System.Drawing.Point(0, 0);
-            this.NavMenu.Name = "NavMenu";
-            this.NavMenu.Size = new System.Drawing.Size(624, 24);
-            this.NavMenu.TabIndex = 0;
-            this.NavMenu.Text = "menuStrip1";
+            this.ContentSplitContainer.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.ContentSplitContainer.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.ContentSplitContainer.FixedPanel = System.Windows.Forms.FixedPanel.Panel1;
+            this.ContentSplitContainer.Location = new System.Drawing.Point(0, 24);
+            this.ContentSplitContainer.Name = "ContentSplitContainer";
+            // 
+            // ContentSplitContainer.Panel1
+            // 
+            this.ContentSplitContainer.Panel1.Controls.Add(this.ConnectionStatusText);
+            this.ContentSplitContainer.Panel1.Controls.Add(this.LoginDetailsLabel);
+            this.ContentSplitContainer.Panel1.Controls.Add(this.DeleteAndBanText);
+            this.ContentSplitContainer.Panel1.Controls.Add(this.DeleteAndBanLabel);
+            this.ContentSplitContainer.Panel1.Controls.Add(this.DeletedText);
+            this.ContentSplitContainer.Panel1.Controls.Add(this.DeletedLabel);
+            this.ContentSplitContainer.Panel1.Controls.Add(this.EditText);
+            this.ContentSplitContainer.Panel1.Controls.Add(this.EditLabel);
+            this.ContentSplitContainer.Panel1.Controls.Add(this.StatsLabel);
+            this.ContentSplitContainer.Panel1.Controls.Add(this.ConnectionStatusLabel);
+            this.ContentSplitContainer.Panel1.Controls.Add(this.SaveLoginDetailsCheckbox);
+            this.ContentSplitContainer.Panel1.Controls.Add(this.PasswordText);
+            this.ContentSplitContainer.Panel1.Controls.Add(this.UsernameText);
+            this.ContentSplitContainer.Panel1.Controls.Add(this.PasswordLabel);
+            this.ContentSplitContainer.Panel1.Controls.Add(this.UsernameLabel);
+            this.ContentSplitContainer.Panel1.Controls.Add(this.ConnectButton);
+            this.ContentSplitContainer.Size = new System.Drawing.Size(784, 537);
+            this.ContentSplitContainer.SplitterDistance = 219;
+            this.ContentSplitContainer.TabIndex = 17;
+            // 
+            // ConnectionStatusText
+            // 
+            this.ConnectionStatusText.AutoSize = true;
+            this.ConnectionStatusText.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.ConnectionStatusText.ForeColor = System.Drawing.Color.Red;
+            this.ConnectionStatusText.Location = new System.Drawing.Point(56, 194);
+            this.ConnectionStatusText.Name = "ConnectionStatusText";
+            this.ConnectionStatusText.Size = new System.Drawing.Size(107, 20);
+            this.ConnectionStatusText.TabIndex = 33;
+            this.ConnectionStatusText.Text = "Disconnected";
+            // 
+            // LoginDetailsLabel
+            // 
+            this.LoginDetailsLabel.AutoSize = true;
+            this.LoginDetailsLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.LoginDetailsLabel.Location = new System.Drawing.Point(16, 12);
+            this.LoginDetailsLabel.Name = "LoginDetailsLabel";
+            this.LoginDetailsLabel.Size = new System.Drawing.Size(130, 24);
+            this.LoginDetailsLabel.TabIndex = 32;
+            this.LoginDetailsLabel.Text = "Login Details";
+            // 
+            // DeleteAndBanText
+            // 
+            this.DeleteAndBanText.Location = new System.Drawing.Point(90, 326);
+            this.DeleteAndBanText.Name = "DeleteAndBanText";
+            this.DeleteAndBanText.ReadOnly = true;
+            this.DeleteAndBanText.Size = new System.Drawing.Size(116, 20);
+            this.DeleteAndBanText.TabIndex = 31;
+            this.DeleteAndBanText.TabStop = false;
+            // 
+            // DeleteAndBanLabel
+            // 
+            this.DeleteAndBanLabel.AutoSize = true;
+            this.DeleteAndBanLabel.Location = new System.Drawing.Point(18, 329);
+            this.DeleteAndBanLabel.Name = "DeleteAndBanLabel";
+            this.DeleteAndBanLabel.Size = new System.Drawing.Size(66, 13);
+            this.DeleteAndBanLabel.TabIndex = 30;
+            this.DeleteAndBanLabel.Text = "Delete+Ban:";
+            // 
+            // DeletedText
+            // 
+            this.DeletedText.Location = new System.Drawing.Point(90, 300);
+            this.DeletedText.Name = "DeletedText";
+            this.DeletedText.ReadOnly = true;
+            this.DeletedText.Size = new System.Drawing.Size(116, 20);
+            this.DeletedText.TabIndex = 29;
+            this.DeletedText.TabStop = false;
+            // 
+            // DeletedLabel
+            // 
+            this.DeletedLabel.AutoSize = true;
+            this.DeletedLabel.Location = new System.Drawing.Point(18, 303);
+            this.DeletedLabel.Name = "DeletedLabel";
+            this.DeletedLabel.Size = new System.Drawing.Size(47, 13);
+            this.DeletedLabel.TabIndex = 28;
+            this.DeletedLabel.Text = "Deleted:";
+            // 
+            // EditText
+            // 
+            this.EditText.Location = new System.Drawing.Point(90, 274);
+            this.EditText.Name = "EditText";
+            this.EditText.ReadOnly = true;
+            this.EditText.Size = new System.Drawing.Size(116, 20);
+            this.EditText.TabIndex = 27;
+            this.EditText.TabStop = false;
+            // 
+            // EditLabel
+            // 
+            this.EditLabel.AutoSize = true;
+            this.EditLabel.Location = new System.Drawing.Point(18, 277);
+            this.EditLabel.Name = "EditLabel";
+            this.EditLabel.Size = new System.Drawing.Size(28, 13);
+            this.EditLabel.TabIndex = 26;
+            this.EditLabel.Text = "Edit:";
+            // 
+            // StatsLabel
+            // 
+            this.StatsLabel.AutoSize = true;
+            this.StatsLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.StatsLabel.Location = new System.Drawing.Point(17, 238);
+            this.StatsLabel.Name = "StatsLabel";
+            this.StatsLabel.Size = new System.Drawing.Size(90, 24);
+            this.StatsLabel.TabIndex = 25;
+            this.StatsLabel.Text = "Bot Stats";
+            // 
+            // ConnectionStatusLabel
+            // 
+            this.ConnectionStatusLabel.AutoSize = true;
+            this.ConnectionStatusLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.ConnectionStatusLabel.Location = new System.Drawing.Point(17, 161);
+            this.ConnectionStatusLabel.Name = "ConnectionStatusLabel";
+            this.ConnectionStatusLabel.Size = new System.Drawing.Size(179, 24);
+            this.ConnectionStatusLabel.TabIndex = 23;
+            this.ConnectionStatusLabel.Text = "Connection Status";
+            // 
+            // SaveLoginDetailsCheckbox
+            // 
+            this.SaveLoginDetailsCheckbox.AutoSize = true;
+            this.SaveLoginDetailsCheckbox.Location = new System.Drawing.Point(20, 100);
+            this.SaveLoginDetailsCheckbox.Name = "SaveLoginDetailsCheckbox";
+            this.SaveLoginDetailsCheckbox.Size = new System.Drawing.Size(157, 17);
+            this.SaveLoginDetailsCheckbox.TabIndex = 3;
+            this.SaveLoginDetailsCheckbox.Text = "SaveLoginDetailsCheckbox";
+            this.SaveLoginDetailsCheckbox.UseVisualStyleBackColor = true;
+            this.SaveLoginDetailsCheckbox.CheckedChanged += new System.EventHandler(this.SaveLoginDetailsCheckbox_CheckedChanged);
+            // 
+            // PasswordText
+            // 
+            this.PasswordText.Location = new System.Drawing.Point(78, 74);
+            this.PasswordText.Name = "PasswordText";
+            this.PasswordText.Size = new System.Drawing.Size(127, 20);
+            this.PasswordText.TabIndex = 2;
+            // 
+            // UsernameText
+            // 
+            this.UsernameText.Location = new System.Drawing.Point(78, 48);
+            this.UsernameText.Name = "UsernameText";
+            this.UsernameText.Size = new System.Drawing.Size(127, 20);
+            this.UsernameText.TabIndex = 1;
+            // 
+            // PasswordLabel
+            // 
+            this.PasswordLabel.AutoSize = true;
+            this.PasswordLabel.Location = new System.Drawing.Point(17, 81);
+            this.PasswordLabel.Name = "PasswordLabel";
+            this.PasswordLabel.Size = new System.Drawing.Size(53, 13);
+            this.PasswordLabel.TabIndex = 19;
+            this.PasswordLabel.Text = "Password";
+            // 
+            // UsernameLabel
+            // 
+            this.UsernameLabel.AutoSize = true;
+            this.UsernameLabel.Location = new System.Drawing.Point(17, 51);
+            this.UsernameLabel.Name = "UsernameLabel";
+            this.UsernameLabel.Size = new System.Drawing.Size(55, 13);
+            this.UsernameLabel.TabIndex = 18;
+            this.UsernameLabel.Text = "Username";
+            // 
+            // ConnectButton
+            // 
+            this.ConnectButton.Location = new System.Drawing.Point(20, 123);
+            this.ConnectButton.Name = "ConnectButton";
+            this.ConnectButton.Size = new System.Drawing.Size(185, 23);
+            this.ConnectButton.TabIndex = 4;
+            this.ConnectButton.Text = "Connect";
+            this.ConnectButton.UseVisualStyleBackColor = true;
+            this.ConnectButton.Click += new System.EventHandler(this.ConnectButton_Click);
             // 
             // FileMenuItem
             // 
@@ -78,39 +245,15 @@
             // QuitMenuItem
             // 
             this.QuitMenuItem.Name = "QuitMenuItem";
-            this.QuitMenuItem.Size = new System.Drawing.Size(97, 22);
+            this.QuitMenuItem.Size = new System.Drawing.Size(152, 22);
             this.QuitMenuItem.Text = "Quit";
             // 
             // SettingMenuItem
             // 
-            this.SettingMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.ManageProfilesMenuItem,
-            this.ManageBannedPhrasesMenuItem,
-            this.ManageCustomCommandsMenuItem});
             this.SettingMenuItem.Name = "SettingMenuItem";
             this.SettingMenuItem.Size = new System.Drawing.Size(61, 20);
             this.SettingMenuItem.Text = "Settings";
-            // 
-            // ManageProfilesMenuItem
-            // 
-            this.ManageProfilesMenuItem.Name = "ManageProfilesMenuItem";
-            this.ManageProfilesMenuItem.Size = new System.Drawing.Size(227, 22);
-            this.ManageProfilesMenuItem.Text = "Manage Profiles";
-            this.ManageProfilesMenuItem.Visible = false;
-            // 
-            // ManageBannedPhrasesMenuItem
-            // 
-            this.ManageBannedPhrasesMenuItem.Name = "ManageBannedPhrasesMenuItem";
-            this.ManageBannedPhrasesMenuItem.Size = new System.Drawing.Size(227, 22);
-            this.ManageBannedPhrasesMenuItem.Text = "Manage Banned Phrases";
-            this.ManageBannedPhrasesMenuItem.Click += new System.EventHandler(this.ManageBannedPhrasesMenuItem_Click);
-            // 
-            // ManageCustomCommandsMenuItem
-            // 
-            this.ManageCustomCommandsMenuItem.Name = "ManageCustomCommandsMenuItem";
-            this.ManageCustomCommandsMenuItem.Size = new System.Drawing.Size(227, 22);
-            this.ManageCustomCommandsMenuItem.Text = "Manage Custom Commands";
-            this.ManageCustomCommandsMenuItem.Visible = false;
+            this.SettingMenuItem.Visible = false;
             // 
             // helpToolStripMenuItem
             // 
@@ -119,168 +262,32 @@
             this.helpToolStripMenuItem.Text = "Help";
             this.helpToolStripMenuItem.Visible = false;
             // 
-            // SendTestMessage
+            // NavMenu
             // 
-            this.SendTestMessage.Location = new System.Drawing.Point(12, 406);
-            this.SendTestMessage.Name = "SendTestMessage";
-            this.SendTestMessage.Size = new System.Drawing.Size(115, 23);
-            this.SendTestMessage.TabIndex = 1;
-            this.SendTestMessage.Text = "Send Test Message";
-            this.SendTestMessage.UseVisualStyleBackColor = true;
-            this.SendTestMessage.Visible = false;
-            this.SendTestMessage.Click += new System.EventHandler(this.SendTestMessage_Click);
-            // 
-            // DeleteMessageText
-            // 
-            this.DeleteMessageText.Location = new System.Drawing.Point(12, 28);
-            this.DeleteMessageText.Name = "DeleteMessageText";
-            this.DeleteMessageText.Size = new System.Drawing.Size(115, 23);
-            this.DeleteMessageText.TabIndex = 2;
-            this.DeleteMessageText.Text = "Delete Message";
-            this.DeleteMessageText.UseVisualStyleBackColor = true;
-            this.DeleteMessageText.Click += new System.EventHandler(this.DeleteMessageText_Click);
-            // 
-            // ConversationIDText
-            // 
-            this.ConversationIDText.Location = new System.Drawing.Point(101, 90);
-            this.ConversationIDText.Name = "ConversationIDText";
-            this.ConversationIDText.Size = new System.Drawing.Size(100, 20);
-            this.ConversationIDText.TabIndex = 3;
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(12, 93);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(83, 13);
-            this.label1.TabIndex = 4;
-            this.label1.Text = "Conversation ID";
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(12, 124);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(61, 13);
-            this.label2.TabIndex = 5;
-            this.label2.Text = "MessageID";
-            // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(12, 150);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(58, 13);
-            this.label3.TabIndex = 6;
-            this.label3.Text = "Timestamp";
-            // 
-            // MessageIDText
-            // 
-            this.MessageIDText.Location = new System.Drawing.Point(101, 121);
-            this.MessageIDText.Name = "MessageIDText";
-            this.MessageIDText.Size = new System.Drawing.Size(100, 20);
-            this.MessageIDText.TabIndex = 7;
-            // 
-            // TimestampText
-            // 
-            this.TimestampText.Location = new System.Drawing.Point(101, 147);
-            this.TimestampText.Name = "TimestampText";
-            this.TimestampText.Size = new System.Drawing.Size(100, 20);
-            this.TimestampText.TabIndex = 8;
-            // 
-            // EditMessage
-            // 
-            this.EditMessage.Location = new System.Drawing.Point(12, 57);
-            this.EditMessage.Name = "EditMessage";
-            this.EditMessage.Size = new System.Drawing.Size(115, 23);
-            this.EditMessage.TabIndex = 9;
-            this.EditMessage.Text = "Edit Message";
-            this.EditMessage.UseVisualStyleBackColor = true;
-            this.EditMessage.Click += new System.EventHandler(this.EditMessage_Click);
-            // 
-            // label4
-            // 
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(12, 178);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(71, 13);
-            this.label4.TabIndex = 11;
-            this.label4.Text = "Edit Message";
-            // 
-            // EditMessageText
-            // 
-            this.EditMessageText.Location = new System.Drawing.Point(101, 175);
-            this.EditMessageText.Name = "EditMessageText";
-            this.EditMessageText.Size = new System.Drawing.Size(100, 20);
-            this.EditMessageText.TabIndex = 10;
-            // 
-            // Connect
-            // 
-            this.Connect.Location = new System.Drawing.Point(479, 85);
-            this.Connect.Name = "Connect";
-            this.Connect.Size = new System.Drawing.Size(115, 23);
-            this.Connect.TabIndex = 12;
-            this.Connect.Text = "Connect";
-            this.Connect.UseVisualStyleBackColor = true;
-            this.Connect.Click += new System.EventHandler(this.Connect_Click);
-            // 
-            // label5
-            // 
-            this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(433, 28);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(55, 13);
-            this.label5.TabIndex = 13;
-            this.label5.Text = "Username";
-            // 
-            // label6
-            // 
-            this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(433, 62);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(53, 13);
-            this.label6.TabIndex = 14;
-            this.label6.Text = "Password";
-            // 
-            // UsernameText
-            // 
-            this.UsernameText.Location = new System.Drawing.Point(494, 25);
-            this.UsernameText.Name = "UsernameText";
-            this.UsernameText.Size = new System.Drawing.Size(100, 20);
-            this.UsernameText.TabIndex = 15;
-            // 
-            // PasswordText
-            // 
-            this.PasswordText.Location = new System.Drawing.Point(494, 59);
-            this.PasswordText.Name = "PasswordText";
-            this.PasswordText.Size = new System.Drawing.Size(100, 20);
-            this.PasswordText.TabIndex = 16;
+            this.NavMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.FileMenuItem,
+            this.SettingMenuItem,
+            this.helpToolStripMenuItem});
+            this.NavMenu.Location = new System.Drawing.Point(0, 0);
+            this.NavMenu.Name = "NavMenu";
+            this.NavMenu.Size = new System.Drawing.Size(784, 24);
+            this.NavMenu.TabIndex = 0;
+            this.NavMenu.Text = "menuStrip1";
             // 
             // Main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(624, 441);
-            this.Controls.Add(this.PasswordText);
-            this.Controls.Add(this.UsernameText);
-            this.Controls.Add(this.label6);
-            this.Controls.Add(this.label5);
-            this.Controls.Add(this.Connect);
-            this.Controls.Add(this.label4);
-            this.Controls.Add(this.EditMessageText);
-            this.Controls.Add(this.EditMessage);
-            this.Controls.Add(this.TimestampText);
-            this.Controls.Add(this.MessageIDText);
-            this.Controls.Add(this.label3);
-            this.Controls.Add(this.label2);
-            this.Controls.Add(this.label1);
-            this.Controls.Add(this.ConversationIDText);
-            this.Controls.Add(this.DeleteMessageText);
-            this.Controls.Add(this.SendTestMessage);
+            this.ClientSize = new System.Drawing.Size(784, 561);
+            this.Controls.Add(this.ContentSplitContainer);
             this.Controls.Add(this.NavMenu);
             this.MainMenuStrip = this.NavMenu;
             this.Name = "Main";
             this.Text = "CurseSharp";
+            this.ContentSplitContainer.Panel1.ResumeLayout(false);
+            this.ContentSplitContainer.Panel1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.ContentSplitContainer)).EndInit();
+            this.ContentSplitContainer.ResumeLayout(false);
             this.NavMenu.ResumeLayout(false);
             this.NavMenu.PerformLayout();
             this.ResumeLayout(false);
@@ -290,30 +297,28 @@
 
         #endregion
 
-        private System.Windows.Forms.MenuStrip NavMenu;
+        private System.Windows.Forms.SplitContainer ContentSplitContainer;
+        private System.Windows.Forms.CheckBox SaveLoginDetailsCheckbox;
+        private System.Windows.Forms.TextBox PasswordText;
+        private System.Windows.Forms.TextBox UsernameText;
+        private System.Windows.Forms.Label PasswordLabel;
+        private System.Windows.Forms.Label UsernameLabel;
+        private System.Windows.Forms.Button ConnectButton;
         private System.Windows.Forms.ToolStripMenuItem FileMenuItem;
         private System.Windows.Forms.ToolStripMenuItem QuitMenuItem;
         private System.Windows.Forms.ToolStripMenuItem SettingMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem ManageProfilesMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem ManageBannedPhrasesMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem ManageCustomCommandsMenuItem;
-        private System.Windows.Forms.Button SendTestMessage;
-        private System.Windows.Forms.Button DeleteMessageText;
-        private System.Windows.Forms.TextBox ConversationIDText;
-        private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.TextBox MessageIDText;
-        private System.Windows.Forms.TextBox TimestampText;
-        private System.Windows.Forms.Button EditMessage;
-        private System.Windows.Forms.Label label4;
-        private System.Windows.Forms.TextBox EditMessageText;
         private System.Windows.Forms.ToolStripMenuItem helpToolStripMenuItem;
-        private System.Windows.Forms.Button Connect;
-        private System.Windows.Forms.Label label5;
-        private System.Windows.Forms.Label label6;
-        private System.Windows.Forms.TextBox UsernameText;
-        private System.Windows.Forms.TextBox PasswordText;
+        private System.Windows.Forms.MenuStrip NavMenu;
+        private System.Windows.Forms.Label ConnectionStatusLabel;
+        private System.Windows.Forms.TextBox DeleteAndBanText;
+        private System.Windows.Forms.Label DeleteAndBanLabel;
+        private System.Windows.Forms.TextBox DeletedText;
+        private System.Windows.Forms.Label DeletedLabel;
+        private System.Windows.Forms.TextBox EditText;
+        private System.Windows.Forms.Label EditLabel;
+        private System.Windows.Forms.Label StatsLabel;
+        private System.Windows.Forms.Label LoginDetailsLabel;
+        private System.Windows.Forms.Label ConnectionStatusText;
     }
 }
 

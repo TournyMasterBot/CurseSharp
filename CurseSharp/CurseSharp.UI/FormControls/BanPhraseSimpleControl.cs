@@ -1,8 +1,11 @@
 ﻿using CurseSharp.CurseClient.Extensions;
+using CurseSharp.CurseClient.Helpers;
 using CurseSharp.CurseClient.Models;
 using CurseSharp.CurseClient.Models.BotModels;
 using CurseSharp.UI.Commands.BanPhrases;
 using System;
+using System.IO;
+using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 
@@ -10,9 +13,12 @@ namespace CurseSharp.UI.FormControls
 {
     public partial class BanPhraseSimpleControl : UserControl
     {
+        private BanPhraseModel banData = new BanPhraseModel();
+
         public BanPhraseSimpleControl()
         {
             InitializeComponent();
+            PopulateBanPhraseDisplayGrid();
         }
 
         private void PunishmentDurationText_KeyPress(object sender, KeyPressEventArgs e)
@@ -27,7 +33,7 @@ namespace CurseSharp.UI.FormControls
         /// Updates the form to match the passed content, for radios checks most destructive
         /// item first and only applies one radio check in case you have been manually editing the ini file
         /// </summary>
-        private void ResetForm(BanPhraseModel content)
+        private void ResetForm(BanPhraseModel content, bool isEdit)
         {
             if(string.IsNullOrWhiteSpace(content.BadPhrase))
             {
@@ -118,6 +124,112 @@ namespace CurseSharp.UI.FormControls
             {
                 PunishmentDurationText.Text = "";
             }
+
+            RemovePlaceholderRowGrid();
+            if(!isEdit)
+            {
+                // Add a placeholder row on 'phrase' grid
+                AddPlaceholderRowGrid();
+            }
+
+        }
+
+        private void PopulateBanPhraseDisplayGrid()
+        {
+            var phrases = BanPhraseManager.GetBanPhrases().Select(x => new { Phrase = x.BadPhrase }).ToArray();
+            var data = DataTableHelper.CreateDataTable(phrases);
+            var binding = new BindingSource();
+            binding.DataSource = data;
+            PhraseDisplayGrid.Columns.Clear();
+            PhraseDisplayGrid.DataSource = binding;
+            PhraseDisplayGrid.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+            PhraseDisplayGrid.SelectionMode = DataGridViewSelectionMode.CellSelect;
+            PhraseDisplayGrid.AllowUserToResizeRows = false;
+            PhraseDisplayGrid.AllowUserToResizeColumns = false;
+            PhraseDisplayGrid.RowHeadersVisible = false;
+            PhraseDisplayGrid.ScrollBars = ScrollBars.Vertical;
+            PhraseDisplayGrid.CellClick += new DataGridViewCellEventHandler(PhraseDisplayGrid_CellClick);
+        }
+
+        public void AddPlaceholderRowGrid()
+        {
+            RemovePlaceholderRowGrid();
+            BanPhraseManager.CreateBanPhrase(new BanPhraseModel()
+            {
+                BadPhrase = "",
+                BadPhraseOriginal = "",
+                BanPhraseOptions = CurseClient.Models.BanPhraseOptions.None,
+                CheckType = BanPhraseCheckType.ExactMatch,
+                LogAction = false,
+                Response = BanPhraseResponse.DoNothing,
+                ResponseDuration = 0 
+            });
+            RefreshDisplay();
+        }
+
+        public void RemovePlaceholderRowGrid()
+        {
+            var foundMatch = false;
+            DataGridViewRow rowToDelete = null;
+            var i = 0;
+            do
+            {
+                if(i < PhraseDisplayGrid.Rows.Count)
+                {
+                    var row = PhraseDisplayGrid.Rows[i];
+                    if(row.Cells[0].Value.ToString() == "")
+                    {
+                        foundMatch = true;
+                        rowToDelete = row;
+                    }
+                }
+                i++;
+            } while(!foundMatch && i <= PhraseDisplayGrid.Rows.Count);
+
+            if(foundMatch && rowToDelete != null)
+            {
+                PhraseDisplayGrid.Rows.Remove(rowToDelete);
+            }
+        }
+
+        private void LoadDisplayPanel(string banphrase)
+        {
+            BanPhraseModel localBan = null;
+            localBan = BanPhraseManager.GetBanPhrases().FirstOrDefault(x => x.BadPhrase == banphrase);
+            // Protection in case ban phrase gets deleted
+            if(localBan == null)
+            {
+                banData = new BanPhraseModel();
+            }
+            else
+            {
+                banData = localBan;
+            }
+        }
+
+        public void ClearSelectedBanPhrase()
+        {
+            banData = new BanPhraseModel();
+        }
+
+        public BanPhraseModel GetCurrentSelectedBanPhrase()
+        {
+            if(string.IsNullOrWhiteSpace(banData.BadPhrase))
+            {
+                LoadDisplayPanel(null);
+            }
+            return banData;
+        }
+
+        public void PhraseDisplayGrid_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            LoadDisplayPanel(PhraseDisplayGrid[e.ColumnIndex, e.RowIndex].Value.ToString());
+            BanPhraseModel phrase = GetCurrentSelectedBanPhrase();
+
+            if(!string.IsNullOrWhiteSpace(phrase.BadPhrase))
+            {
+                ResetForm(phrase, true);
+            }
         }
 
         private void SaveBanPhrase_Click(object sender, System.EventArgs e)
@@ -202,8 +314,6 @@ namespace CurseSharp.UI.FormControls
                 banPhraseData.BanPhraseOptions |= CurseClient.Models.BanPhraseOptions.LogActionsTaken;
             }
 
-            
-
             try
             {
                 BanPhraseManager.CreateBanPhrase(banPhraseData);
@@ -223,36 +333,71 @@ namespace CurseSharp.UI.FormControls
 
         private void RefreshDisplay()
         {
-            while(BanPhraseListDisplay.Controls.Count > 0)
-            {
-                BanPhraseListDisplay.Controls.RemoveAt(0);
-            }
-            var displayPhrases = new BanPhraseListDisplayControl();
-            displayPhrases.Dock = DockStyle.Fill;
-            BanPhraseListDisplay.Controls.Add(displayPhrases);
+            PopulateBanPhraseDisplayGrid();
         }
 
         private void LoadBanPhrase_Click(object sender, EventArgs e)
         {
-            BanPhraseModel phrase = ((BanPhraseListDisplayControl)BanPhraseListContentPanel.Controls[0]).GetCurrentSelectedBanPhrase();
-            ResetForm(phrase);
+            DialogResult result = OpenFileDialog.ShowDialog();
+            if(result == DialogResult.OK)
+            {
+                try
+                {
+                    using(var filestream = new FileStream(OpenFileDialog.FileName, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
+                    {
+                        using(var reader = new StreamReader(filestream, Encoding.UTF8))
+                        {
+                            var data = reader.ReadToEnd();
+                            var lines = data.Split(new string[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries);
+                            foreach(var line in lines)
+                            {
+                                if(!string.IsNullOrWhiteSpace(line))
+                                {
+                                    var banPhraseData = new BanPhraseModel();
+                                    banPhraseData.BadPhraseOriginal = line;
+                                    banPhraseData.BadPhrase = line.NormalizeForComparison();
+                                    banPhraseData.Response = BanPhraseResponse.Edit;
+                                    banPhraseData.CheckType = BanPhraseCheckType.ExactMatch;
+                                    banPhraseData.BanPhraseOptions = CurseClient.Models.BanPhraseOptions.None;
+
+                                    try
+                                    {
+                                        BanPhraseManager.CreateBanPhrase(banPhraseData);
+                                        BanPhraseManager.SaveBanPhrases();
+                                    }
+                                    catch(Exception ex)
+                                    {
+                                        Logging.Log.Error(ex.ToString());
+                                    }
+                                }
+                            }
+                            RefreshDisplay();
+                        }
+                    }
+                }
+                catch(Exception ex)
+                {
+                    Logging.Log.Error(ex.ToString());
+                    MessageBox.Show($@"An error occurred while trying to load ban phrases. {ex.Message}");
+                }
+            }
         }
 
         private void CreateNewBanPhraseButton_Click(object sender, EventArgs e)
         {
-            ResetForm(new BanPhraseModel());
+            ResetForm(new BanPhraseModel(), false);
         }
 
         private void DeleteSelectedBanPhraseButton_Click(object sender, EventArgs e)
         {
             try
             {
-                BanPhraseModel phrase = ((BanPhraseListDisplayControl)BanPhraseListContentPanel.Controls[0]).GetCurrentSelectedBanPhrase();
-                if(phrase != null && !string.IsNullOrWhiteSpace(phrase.BadPhrase))
+                BanPhraseModel phrase = GetCurrentSelectedBanPhrase();
+                if(phrase != null && phrase.BadPhrase != null)
                 {
                     BanPhraseManager.DeleteBanPhrase(phrase);
                 }
-                ((BanPhraseListDisplayControl)BanPhraseListContentPanel.Controls[0]).ClearSelectedBanPhrase();
+                ClearSelectedBanPhrase();
                 RefreshDisplay();
             }
             catch(Exception ex)

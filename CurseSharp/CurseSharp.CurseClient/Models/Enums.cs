@@ -27,6 +27,12 @@ namespace CurseSharp.CurseClient.Models
         LogActionsTaken = 1 << 1
     }
 
+    public enum BotConnectionStatus
+    {
+        Disconnected = 0,
+        Connected = 1
+    }
+
     #endregion
 
     #region Curse App Enums

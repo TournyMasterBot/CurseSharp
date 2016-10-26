@@ -3,6 +3,7 @@ using CurseSharp.CurseClient.Endpoints;
 using CurseSharp.CurseClient.Extensions;
 using CurseSharp.CurseClient.Models;
 using CurseSharp.CurseClient.Models.BotModels;
+using CurseSharp.CurseClient.Sessions;
 using CurseSharp.UI.Commands.BanPhrases;
 using CurseSharp.UI.Service;
 using System;
@@ -25,10 +26,7 @@ namespace CurseSharp.UI.Commands
             // Apply message filtering and censoring for users who do not have the 'All' permission
             if(e.SenderPermissions != Enums.GroupPermissions.All)
             {
-                Task.Factory.StartNew(() =>
-                {
-                    MessageFilters(e);
-                });
+                MessageFilters(e);
             }
             
         }
@@ -102,14 +100,31 @@ namespace CurseSharp.UI.Commands
             {
                 MessageEndpoint.DeleteMessage(Bot.Client.Account, e.ConversationID, e.ServerID, e.MessageTimestamp.ToString());
                 MessageEndpoint.BanUser(Bot.Client.Account, e.RootConversationID, e.Author.UserID, "Banned Phrase Usage", false, Enums.BanUserMessageDeleteMode.None);
+
+                lock(SessionState.BotStats)
+                {
+                    SessionState.BotStats.UsersBanned++;
+                    SessionState.SaveBotStats();
+                }
             }
             else if(deleteMessage)
             {
                 MessageEndpoint.DeleteMessage(Bot.Client.Account, e.ConversationID, e.ServerID, e.MessageTimestamp.ToString());
+                lock(SessionState.BotStats)
+                {
+                    SessionState.BotStats.MessagesDeleted++;
+                    SessionState.SaveBotStats();
+                }
             }
             else if(editMessage)
             {
                 MessageEndpoint.EditMessage(Bot.Client.Account, e.ConversationID, e.ServerID, e.MessageTimestamp.ToString(), e.MessageBody, e.Mentions);
+
+                lock(SessionState.BotStats)
+                {
+                    SessionState.BotStats.MessagesEdited++;
+                    SessionState.SaveBotStats();
+                }
             }
         }
     }

@@ -20,7 +20,7 @@ namespace CurseSharp.CurseClient.Endpoints
             }
             catch(Exception ex)
             {
-                Console.WriteLine(ex.ToString());
+                Logging.Log.Error(ex.ToString());
             }
             return result;
         }
