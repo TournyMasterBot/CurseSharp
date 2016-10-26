@@ -17,4 +17,7 @@ Log method for the bot. You can change logging options in this project to manage
 ## CurseSharp.TestClient
 Internal developer project, this project can be safely removed if your solution file includes a reference to it - or create a blank/empty project with the same name to prevent pulls in the future if you merge updates.
 
+## CurseSharp.UI
+Windows Form example bot. Intended usage is for basic moderation tools and channel management.
+
 ###### CurseSharp is an unofficial client designed to connect to Curse servers.
