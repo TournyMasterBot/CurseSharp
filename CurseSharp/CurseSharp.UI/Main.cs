@@ -1,13 +1,9 @@
-﻿using CurseSharp.CurseClient.Endpoints;
-using CurseSharp.UI.Commands;
-using CurseSharp.UI.Commands.BanPhrases;
+﻿using CurseSharp.UI.Commands.BanPhrases;
 using CurseSharp.UI.FormControls;
 using CurseSharp.UI.Service;
 using System;
 using System.Windows.Forms;
 using System.Timers;
-using CuseSharp.Sockets;
-using static CurseSharp.CurseClient.Sessions.SessionState;
 using CurseSharp.CurseClient.Models;
 using CurseSharp.CurseClient.Sessions;
 using System.Drawing;
@@ -15,6 +11,8 @@ using System.IO;
 using CurseSharp.CurseClient.Models.BotModels;
 using Newtonsoft.Json;
 using System.Text;
+using CurseSharp.CurseClient.Endpoints;
+using System.Linq;
 
 namespace CurseSharp.UI
 {
@@ -58,11 +56,13 @@ namespace CurseSharp.UI
                         {
                             ConnectionStatusText.ForeColor = Color.Green;
                             ConnectButton.Text = "Reconnect";
+                            RefreshRolesButton.Enabled = true;
                         }
                         else if(ConnectionStatusText.Text == "Disconnected")
                         {
                             ConnectionStatusText.ForeColor = Color.Red;
                             ConnectButton.Text = "Connect";
+                            RefreshRolesButton.Enabled = false;
                         }
                     }
                 }));
@@ -77,11 +77,13 @@ namespace CurseSharp.UI
                     {
                         ConnectionStatusText.ForeColor = Color.Green;
                         ConnectButton.Text = "Reconnect";
+                        RefreshRolesButton.Enabled = true;
                     }
                     else if(ConnectionStatusText.Text == "Disconnected")
                     {
                         ConnectionStatusText.ForeColor = Color.Red;
                         ConnectButton.Text = "Connect";
+                        RefreshRolesButton.Enabled = false;
                     }
                 }
                 
@@ -234,6 +236,9 @@ namespace CurseSharp.UI
             try
             {
                 Bot.Client.Run(username, password);
+                Bot.InitializeBot();
+                // Todo later: Support multiple servers by not using '.First()' here
+                Bot.Groups = GroupsEndpoint.GetServerGroups(Bot.Client.Account, Bot.Channels.Keys.First());
                 return true;
             }
             catch(Exception ex)
@@ -269,8 +274,6 @@ namespace CurseSharp.UI
                         MessageBox.Show($@"Unable to save login detail changes, {ex.Message.ToString()}");
                     }
                 }
-
-                Bot.InitializeBot();
             }
         }
 
@@ -300,6 +303,22 @@ namespace CurseSharp.UI
             {
                 Logging.Log.Error(ex.ToString());
                 MessageBox.Show($@"Unable to save login detail changes, {ex.Message.ToString()}");
+            }
+        }
+
+        #region POPULATED USING A CUSTOM "IList" DATASOURCE
+        private void PopulateDropdown()
+        {
+            
+        }
+
+        #endregion
+
+        private void RefreshRolesButton_Click(object sender, EventArgs e)
+        {
+            if(SessionState.ConnectionStatus == BotConnectionStatus.Connected)
+            {
+                Bot.Groups = GroupsEndpoint.GetServerGroups(Bot.Client.Account, Bot.Channels.Keys.First());
             }
         }
     }

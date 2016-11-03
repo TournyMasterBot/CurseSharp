@@ -1,9 +1,12 @@
 ﻿using CurseSharp.CurseClient.Bot;
 using CurseSharp.CurseClient.Endpoints;
 using CurseSharp.CurseClient.Models;
+using CurseSharp.CurseClient.Models.ApiModels;
+using CurseSharp.CurseClient.Models.CurseClientModels.ContactModels;
 using CurseSharp.UI.Commands;
 using CurseSharp.UI.Commands.BanPhrases;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace CurseSharp.UI.Service
@@ -16,7 +19,8 @@ namespace CurseSharp.UI.Service
         public static BotManager Client = null;
         // Test debug stuff
         public static ContactsEndpoint AvailableChannels = new ContactsEndpoint();
-        public static string TestChannel = String.Empty;
+        public static ServerGroupModel[] Groups = null;
+        public static Dictionary<string, HashSet<ChannelModel>> Channels = new Dictionary<string, HashSet<ChannelModel>>();
         public static string CommandTrigger = String.Empty;
 
         private Bot()
@@ -64,6 +68,21 @@ namespace CurseSharp.UI.Service
         private static void AssignTestChannel()
         {
             var contactData = AvailableChannels.GetContacts(Client.Account);
+            foreach(var server in contactData.Groups)
+            {
+                if(!Channels.ContainsKey(server.GroupID))
+                {
+                    Channels.Add(server.GroupID, new HashSet<ChannelModel>());
+                }
+                var groups = contactData.Groups;
+                var channels = groups.SelectMany(x => x.Channels.Where(y => Channels[server.GroupID].All(z => z.GroupID != y.GroupID)).Select(y => y)).ToList();
+                foreach(var channel in channels)
+                {
+                    Channels[server.GroupID].Add(channel);
+                }
+            }
+            
+            /*
             TestChannel =
                 contactData
                     // Look for text chats in groups
@@ -74,6 +93,7 @@ namespace CurseSharp.UI.Service
                         // But more specifically, we want the group ID so that we can send a message to it.
                         .Select(y => y.GroupID).First()
                     ).First();
+               */
         }
     }
 }

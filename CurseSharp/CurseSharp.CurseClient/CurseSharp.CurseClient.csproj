@@ -52,6 +52,7 @@
     <Compile Include="Bot\BotCommandManager.cs" />
     <Compile Include="Bot\BotManager.cs" />
     <Compile Include="Endpoints\ContactsEndpoint.cs" />
+    <Compile Include="Endpoints\GroupsEndpoint.cs" />
     <Compile Include="Endpoints\LoginEndpoint.cs" />
     <Compile Include="Endpoints\MessageEndpoint.cs" />
     <Compile Include="Endpoints\SessionEndpoint.cs" />
@@ -60,6 +61,7 @@
     <Compile Include="Extensions\JsonExtensions.cs" />
     <Compile Include="Extensions\StringExtensions.cs" />
     <Compile Include="Helpers\DataTableHelper.cs" />
+    <Compile Include="Models\ApiModels\ServerGroupModel.cs" />
     <Compile Include="Models\BotModels\AccountModel.cs" />
     <Compile Include="Models\BotModels\BanPhraseModel.cs" />
     <Compile Include="Models\BotModels\BanWordHandlerModel.cs" />
@@ -67,6 +69,7 @@
     <Compile Include="Models\BotModels\BotStatisticsModel.cs" />
     <Compile Include="Models\BotModels\CommandTriggerModel.cs" />
     <Compile Include="Models\BotModels\UserLoginModel.cs" />
+    <Compile Include="Models\CurseClientModels\ContactModels\GroupRoleNotificationModel.cs" />
     <Compile Include="Models\CurseClientModels\MessageModels\BanUserMessageModel.cs" />
     <Compile Include="Models\CurseClientModels\MessageModels\DeleteChatMessageModel.cs" />
     <Compile Include="Models\CurseClientModels\MessageModels\EditChatMessageModel.cs" />

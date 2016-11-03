@@ -41,7 +41,7 @@ namespace CurseSharp.UI.Commands
                         }
                         if(!string.IsNullOrWhiteSpace(commandlist.ToString()))
                         {
-                            MessageEndpoint.SendChatMessage(Bot.Client.Account, Bot.TestChannel, commandlist.ToString());
+                            MessageEndpoint.SendChatMessage(Bot.Client.Account, Bot.Channels.First().Value.First().GroupID, commandlist.ToString());
                         }
                     }
                 })
@@ -64,22 +64,22 @@ namespace CurseSharp.UI.Commands
                     int i = 0;
                     try
                     {
-                        MessageEndpoint.SendChatMessage(Bot.Client.Account, Bot.TestChannel, $"Let's count to infinity!");
+                        MessageEndpoint.SendChatMessage(Bot.Client.Account, Bot.Channels.First().Value.First().GroupID, $"Let's count to infinity!");
                         Thread.Sleep(1000);
                         while(!message.Command.CancellationToken.IsCancellationRequested)
                         {
                             CancellationToken token = message.Command.CancellationToken.Token;
                             i++;
-                            MessageEndpoint.SendChatMessage(Bot.Client.Account, Bot.TestChannel, $"{i}");
+                            MessageEndpoint.SendChatMessage(Bot.Client.Account, Bot.Channels.First().Value.First().GroupID, $"{i}");
                             Thread.Sleep(1000);
                         }
 
-                        MessageEndpoint.SendChatMessage(Bot.Client.Account, Bot.TestChannel, $"Aw, ok. I'll stop counting to infinity.");
+                        MessageEndpoint.SendChatMessage(Bot.Client.Account, Bot.Channels.First().Value.First().GroupID, $"Aw, ok. I'll stop counting to infinity.");
                         message.Command.CancellationToken = new CancellationTokenSource();
                     }
                     catch(Exception ex)
                     {
-                        MessageEndpoint.SendChatMessage(Bot.Client.Account, Bot.TestChannel, $"Something broke. I'll stop counting to infinity.");
+                        MessageEndpoint.SendChatMessage(Bot.Client.Account, Bot.Channels.First().Value.First().GroupID, $"Something broke. I'll stop counting to infinity.");
                         Log.Error(ex.ToString());
                     }
                 })
